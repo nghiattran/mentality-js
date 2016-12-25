@@ -23,9 +23,9 @@
   "homepage": "",
   "dependencies": {},
   "devDependencies": {
-    "coveralls": "2.11.2",
-    "istanbul": "0.3.14",
-    "mocha": "2.2.5",
-    "mocha-lcov-reporter": "0.0.2"
+    "coveralls": "^2.11.15",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.2.0",
+    "mocha-lcov-reporter": "^1.2.0"
   }
 }

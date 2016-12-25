@@ -3,6 +3,8 @@
 let assert = require('assert');
 let fs = require('fs');
 let Network = require('./').Network;
+let Perceptron = require('./').Perceptron;
+let Trainer = require('./').Trainer;
 
 describe('Test fromJson/toJson', function(){
   function checkNeurons(first, second) {
@@ -32,7 +34,7 @@ describe('Test fromJson/toJson', function(){
   let network;
   let networkJson;
   before(function () {
-    networkJson = fs.readFileSync('./test/test_network.json').toString();
+    networkJson = fs.readFileSync('./sample/test_network.json').toString();
     networkJson = JSON.parse(networkJson);
     network = Network.fromJson(networkJson);
   })
@@ -49,3 +51,35 @@ describe('Test fromJson/toJson', function(){
     checkNetworks(network, json);
   });
 });
+
+describe('Test Perceptron', function() {
+  function sum(arr) {
+    return arr.reduce(function(a, b) {
+      return a + b;
+    }, 0);
+  }
+
+  it('Test XOR operation', function() {
+    let network = new Perceptron(2, [20], 1);
+    let trainer = new Trainer(network);
+    let result = trainer.XOR();
+    assert(result.error < 0.1);
+
+    assert(Math.abs(sum(network.activate([0, 0])) - 0) < 0.1);
+    assert(Math.abs(sum(network.activate([1, 0])) - 1) < 0.1);
+    assert(Math.abs(sum(network.activate([0, 1])) - 1) < 0.1);
+    assert(Math.abs(sum(network.activate([1, 1])) - 0) < 0.1);
+  });
+
+  it('Test AND operation', function() {
+    let network = new Perceptron(2, [20], 1);
+    let trainer = new Trainer(network);
+    let result = trainer.AND();
+    assert(result.error < 0.1);
+
+    assert(Math.abs(sum(network.activate([0, 0])) - 0) < 0.1);
+    assert(Math.abs(sum(network.activate([1, 0])) - 0) < 0.1);
+    assert(Math.abs(sum(network.activate([0, 1])) - 0) < 0.1);
+    assert(Math.abs(sum(network.activate([1, 1])) - 1) < 0.1);
+  });
+})

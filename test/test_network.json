@@ -1,0 +1,93 @@
+{
+    "connections": [
+        {
+            "from": 1,
+            "to": 3,
+            "weight": 0.5
+        },
+        {
+            "from": 1,
+            "to": 4,
+            "weight": 0.9
+        },
+        {
+            "from": 2,
+            "to": 3,
+            "weight": 0.4
+        },
+        {
+            "from": 2,
+            "to": 4,
+            "weight": 1.0
+        },
+        {
+            "from": 3,
+            "to": 5,
+            "weight": -1.2
+        },
+        {
+            "from": 4,
+            "to": 5,
+            "weight": 1.1
+        }
+    ],
+    "layers": {
+        "hidden": [
+            {
+                "name": "0",
+                "neurons": [
+                    {
+                        "activation": 0,
+                        "id": 3,
+                        "old": 0,
+                        "state": 0,
+                        "threshold": 0.8,
+                        "squash": "LOGISTIC"
+                    },
+                    {
+                        "activation": 0,
+                        "id": 4,
+                        "old": 0,
+                        "state": 0,
+                        "threshold": -0.1,
+                        "squash": "LOGISTIC"
+                    }
+                ]
+            }
+        ],
+        "input": {
+            "name": "input",
+            "neurons": [
+                {
+                    "activation": 0,
+                    "id": 1,
+                    "old": 0,
+                    "state": 0,
+                    "threshold": 0,
+                    "squash": "LOGISTIC"
+                },
+                {
+                    "activation": 0,
+                    "id": 2,
+                    "old": 0,
+                    "state": 0,
+                    "threshold": 0,
+                    "squash": "LOGISTIC"
+                }
+            ]
+        },
+        "output": {
+            "name": "output",
+            "neurons": [
+                {
+                    "activation": 0,
+                    "id": 5,
+                    "old": 0,
+                    "state": 0,
+                    "threshold": 0.3,
+                    "squash": "LOGISTIC"
+                }
+            ]
+        }
+    }
+}

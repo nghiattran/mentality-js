@@ -24,8 +24,8 @@ Yeoman has a heart of gold. He&#39;s a person with feelings and opinions, but he
 ## License
 MIT © [Nghia Tran]()
 
-[npm-image]: https://badge.fury.io/js/mentality-js.svg
-[npm-url]: https://npmjs.org/package/mentality-js
+[npm-image]: https://badge.fury.io/js/mentality.svg
+[npm-url]: https://npmjs.org/package/mentality
 [travis-image]: https://travis-ci.org/nghiattran/mentality-js.svg?branch=master
 [travis-url]: https://travis-ci.org/nghiattran/mentality-js
 [daviddm-image]: https://david-dm.org/nghiattran/mentality-js.svg?theme=shields.io

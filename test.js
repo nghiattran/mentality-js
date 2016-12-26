@@ -5,6 +5,9 @@ let fs = require('fs');
 let Network = require('./').Network;
 let Perceptron = require('./').Perceptron;
 let Trainer = require('./').Trainer;
+let Layer = require('./').Layer;
+let ValueError = require('./').ValueError;
+
 
 describe('Test fromJson/toJson', function(){
   function checkNeurons(first, second) {
@@ -82,4 +85,110 @@ describe('Test Perceptron', function() {
     assert(Math.abs(sum(network.activate([0, 1])) - 0) < 0.1);
     assert(Math.abs(sum(network.activate([1, 1])) - 1) < 0.1);
   });
+})
+
+describe('Test Trainer options parser', function() {
+  it('Test epoch limit setting', function() {
+    let network = new Perceptron(2, [], 1);
+    let trainer = new Trainer(network);
+    let epoch = 5;
+    let result = trainer.XOR({
+      epoch
+    });
+
+    assert(result.epoch === epoch);
+  });
+
+  it('Test rate setting', function() {
+    let network = new Perceptron(2, [], 1);
+    let trainer = new Trainer(network);
+    let rate = 0.5;
+    let result = trainer.XOR({
+      rate, epoch: 5
+    });
+    assert(result.rate === rate);
+  });
+
+  it('Test adaptative learning rate', function() {
+    let network = new Perceptron(2, [], 1);
+    let trainer = new Trainer(network);
+    let epoch = 10;
+    let lastRate = 0.05;
+    let result = trainer.XOR({
+      epoch,
+      rate: function (learningRate) {
+        if (learningRate === -1) {
+          return 0.1
+        };
+        assert(learningRate === lastRate + 0.05);
+        lastRate = learningRate;
+        return learningRate + 0.05;
+      }
+    });
+  });
+
+  it('Test error setting', function() {
+    let network = new Perceptron(2, [10], 1);
+    let trainer = new Trainer(network);
+    let error = 0.05;
+    let result = trainer.XOR({
+      error
+    });
+    assert(error >= result.error);
+  });
+})
+
+describe('Test error handler', function() {
+  describe('Trainer', function() {
+    it('Test train empty network', function() {
+      let network = new Network();
+      let trainer = new Trainer(network);
+      let epoch = 5;
+
+      assert.throws(trainer.XOR, TypeError);
+    });
+  })
+
+  describe('Layer', function() {
+    it('Test create empty Layer', function() {
+      let createLayer = () => new Layer();
+      assert.throws(createLayer, ValueError);
+    });
+
+    it('Test activate Layer with wrong number of inputs', function() {
+      let layer = new Layer(5);
+      let activate = () => layer.activate([0,0,0]);
+
+      assert.throws(activate, ValueError);
+    });
+
+    it('Test propagate Layer with wrong number of inputs', function() {
+      let layer = new Layer(5);
+      let propagate = () => layer.propagate(0.1, [0,0,0]);
+
+      assert.throws(propagate, ValueError);
+    });
+
+    it('Test project on non-Layer object: array', function() {
+      let layer = new Layer(5);
+      let project = () => layer.project([0,0,0]);
+      
+      assert.throws(project, ValueError);
+    });
+
+    it('Test project on non-Layer object: object', function() {
+      let layer = new Layer(5);
+      let project = () => layer.project({});
+      
+      assert.throws(project, ValueError);
+    });
+
+    it('Test project on non-Layer object: Network', function() {
+      let layer = new Layer(5);
+      let network = new Network();
+      let project = () => layer.project(network);
+      
+      assert.throws(project, ValueError);
+    });
+  })
 })

@@ -7,26 +7,9 @@ let Cost = require('./lib/trainer').Cost;
 let Neuron = require('./lib/neuron').Neuron;
 let squash = require('./lib/neuron').squash;
 let Connection = require('./lib/connection').Connection;
-let fs = require('fs');
+let Layer = require('./lib/layer').Layer;
+let ValueError = require('./lib/errors').ValueError;
 
 module.exports = {
-  Perceptron, Trainer, Cost, Neuron, squash, Connection, Network
+  Perceptron, Trainer, Cost, Neuron, squash, Connection, Network, Layer, ValueError
 };
-
-// let content = fs.readFileSync('./sample/test_network.json').toString();
-// content = JSON.parse(content);
-// let network = Perceptron.fromJson(content);
-// console.log(network);
-// let network = new Perceptron(2, [20], 1);
-// let trainer = new Trainer(network)
-// let settings = {
-//     'momentum': 0.,    
-//     'log': 1,
-//     // epoch: 2,
-//     'error': 0.01,
-//     'cost': Cost.SE
-// }
-
-// let res = trainer.AND(settings)
-// console.log(res);
-// console.log(network.toJson());

@@ -8,6 +8,7 @@ let Trainer = require('./').Trainer;
 let Layer = require('./').Layer;
 let ValueError = require('./').ValueError;
 let Neuron = require('./').Neuron;
+let MasterNetwork = require('./').MasterNetwork;
 
 describe('Test fromJson/toJson', function() {
   describe('Network', function() {
@@ -155,43 +156,9 @@ describe('Test object comparation', function() {
     it('Compare 2 identical Layers', function() {
       let neuron1 = new Neuron(10);
       let neuron2 = Neuron.fromJson(neuron1.toJson());
-      // console.log(neuron2);
-      // console.log(neuron1);
       assert(neuron1.compareTo(neuron2));
     });
   })
-})
-
-describe('Test Perceptron', function() {
-  function sum(arr) {
-    return arr.reduce(function(a, b) {
-      return a + b;
-    }, 0);
-  }
-
-  it('Test XOR operation', function() {
-    let network = new Perceptron(2, [20], 1);
-    let trainer = new Trainer(network);
-    let result = trainer.XOR();
-    assert(result.error < 0.1);
-
-    assert(Math.abs(sum(network.activate([0, 0])) - 0) < 0.1);
-    assert(Math.abs(sum(network.activate([1, 0])) - 1) < 0.1);
-    assert(Math.abs(sum(network.activate([0, 1])) - 1) < 0.1);
-    assert(Math.abs(sum(network.activate([1, 1])) - 0) < 0.1);
-  });
-
-  it('Test AND operation', function() {
-    let network = new Perceptron(2, [20], 1);
-    let trainer = new Trainer(network);
-    let result = trainer.AND();
-    assert(result.error < 0.1);
-
-    assert(Math.abs(sum(network.activate([0, 0])) - 0) < 0.1);
-    assert(Math.abs(sum(network.activate([1, 0])) - 0) < 0.1);
-    assert(Math.abs(sum(network.activate([0, 1])) - 0) < 0.1);
-    assert(Math.abs(sum(network.activate([1, 1])) - 1) < 0.1);
-  });
 })
 
 describe('Test Trainer options parser', function() {
@@ -300,6 +267,114 @@ describe('Test error handler', function() {
   })
 })
 
-describe('Test master network', function() {
+describe('Test functionality', function() {
+  function sum(arr) {
+    return arr.reduce(function(a, b) {
+      return a + b;
+    }, 0);
+  }
 
+  describe('MasterNetwork', function() {
+    it('Test XOR operation', function() {
+      let per1 = new Perceptron(2, [], 10);
+      let per2 = new Perceptron(10, [], 2);
+      let per3 = new Perceptron(10, [], 2);
+      let per4 = new Perceptron(2, [], 1);
+      let per5 = new Perceptron(2, [], 1);
+
+      per1.project(per2);
+      per1.project(per3);
+      per2.project(per4);
+      per3.project(per4);
+
+      let network = new MasterNetwork(per2);
+      network.ready();
+      let fs = require('fs')
+      let trainer = new Trainer(network);
+      let error = 0.1;
+
+      let result = trainer.XOR({
+        shuffle: true,
+        momentum: 0.99,
+        rate: 0.5,
+        error
+      });
+
+      assert(result.error < 0.1);
+      let errorBound = Math.sqrt(error);
+
+      assert(Math.abs(sum(network.activate([0, 0])) - 0) < errorBound);
+      assert(Math.abs(sum(network.activate([1, 0])) - 1) < errorBound);
+      assert(Math.abs(sum(network.activate([0, 1])) - 1) < errorBound);
+      assert(Math.abs(sum(network.activate([1, 1])) - 0) < errorBound);
+
+      this.retries(5);
+    });
+
+    it('Test AND operation', function() {
+      let per1 = new Perceptron(2, [], 10);
+      let per2 = new Perceptron(10, [], 2);
+      let per3 = new Perceptron(10, [], 2);
+      let per4 = new Perceptron(2, [], 1);
+      let per5 = new Perceptron(2, [], 1);
+
+      per1.project(per2);
+      per1.project(per3);
+      per2.project(per4);
+      per3.project(per4);
+
+      let network = new MasterNetwork(per2);
+      network.ready();
+      let fs = require('fs')
+      let trainer = new Trainer(network);
+      let error = 0.1;
+
+      let result = trainer.AND({
+        shuffle: true,
+        momentum: 0.99,
+        rate: 0.5,
+        error
+      });
+
+      assert(result.error < 0.1);
+      let errorBound = Math.sqrt(error);
+
+      assert(Math.abs(sum(network.activate([0, 0])) - 0) < errorBound);
+      assert(Math.abs(sum(network.activate([1, 0])) - 0) < errorBound);
+      assert(Math.abs(sum(network.activate([0, 1])) - 0) < errorBound);
+      assert(Math.abs(sum(network.activate([1, 1])) - 1) < errorBound);
+
+      this.retries(5);
+    });
+  })
+
+  describe('Perceptron', function() {
+    it('Test XOR operation', function() {
+      let network = new Perceptron(2, [20], 1);
+      let trainer = new Trainer(network);
+      let result = trainer.XOR();
+      assert(result.error < 0.1);
+      let errorBound = Math.sqrt(0.1);
+
+      assert(Math.abs(sum(network.activate([0, 0])) - 0) < errorBound);
+      assert(Math.abs(sum(network.activate([1, 0])) - 1) < errorBound);
+      assert(Math.abs(sum(network.activate([0, 1])) - 1) < errorBound);
+      assert(Math.abs(sum(network.activate([1, 1])) - 0) < errorBound);
+      this.retries(3);
+    });
+
+    it('Test AND operation', function() {
+      let network = new Perceptron(2, [20], 1);
+      let trainer = new Trainer(network);
+      let result = trainer.AND();
+      assert(result.error < 0.1);
+      let errorBound = Math.sqrt(0.1);
+
+      assert(Math.abs(sum(network.activate([0, 0])) - 0) < errorBound);
+      assert(Math.abs(sum(network.activate([1, 0])) - 0) < errorBound);
+      assert(Math.abs(sum(network.activate([0, 1])) - 0) < errorBound);
+      assert(Math.abs(sum(network.activate([1, 1])) - 1) < errorBound);
+      this.retries(3);
+    });
+  })
 })

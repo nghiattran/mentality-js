@@ -8,7 +8,7 @@ let Trainer = require('./').Trainer;
 let Layer = require('./').Layer;
 let ValueError = require('./').ValueError;
 let Neuron = require('./').Neuron;
-let MasterNetwork = require('./').MasterNetwork;
+
 
 describe('Test fromJson/toJson', function() {
   describe('Network', function() {
@@ -21,14 +21,14 @@ describe('Test fromJson/toJson', function() {
     })
     
     it('fromJson', function() {
-      network = Network.fromJson(networkJson);
-      assert(network.compareTo(networkJson.layers));
+      let tmpnetwork = Network.fromJson(networkJson);
+      assert(network.compareTo(tmpnetwork));
     });
 
     it('toJson', function() {
-      network = Network.fromJson(networkJson);
+      let tmpnetwork = Network.fromJson(networkJson);
       let json = network.toJson();
-      assert(network.compareTo(json.layers));
+      assert(network.compareTo(tmpnetwork));
     });
   })
 });
@@ -63,8 +63,8 @@ describe('Test object comparation', function() {
       let layer12 = new Layer(5);
       layer11.project(layer12);
       let network1 = new Network({
-        input: layer11,
-        output: layer12
+        input: layer11.neurons,
+        output: layer12.neurons
       });
 
       let layer21 = new Layer(5);
@@ -75,9 +75,8 @@ describe('Test object comparation', function() {
       layer22.project(layer23);
       layer23.project(layer24);
       let network2 = new Network({
-        input: layer21,
-        hidden: [layer22, layer23],
-        output: layer24
+        input: layer21.neurons,
+        output: layer24.neurons
       });
 
       assert(!network1.compareTo(network2));
@@ -88,16 +87,16 @@ describe('Test object comparation', function() {
       let layer12 = new Layer(5);
       layer11.project(layer12);
       let network1 = new Network({
-        input: layer11,
-        output: layer12
+        input: layer11.neurons,
+        output: layer12.neurons
       });
 
       let layer21 = new Layer(5);
       let layer22 = new Layer(5);
       layer21.project(layer22);
       let network2 = new Network({
-        input: layer21,
-        output: layer22
+        input: layer21.neurons,
+        output: layer22.neurons
       });
 
       assert(!network1.compareTo(network2));
@@ -109,52 +108,29 @@ describe('Test object comparation', function() {
       layer11.project(layer12);
 
       let network1 = new Network({
-        input: layer11,
-        output: layer12
+        input: layer11.neurons,
+        output: layer12.neurons
       });
 
       let network2 = new Network({
-        input: layer11,
-        output: layer12
+        input: layer11.neurons,
+        output: layer12.neurons
       });
 
       assert(network1.compareTo(network2));
     });
   })
 
-  describe('Layer', function() {
-    it('Compare 2 different Layers', function() {
-      let layer1 = new Layer(10);
-      let layer2 = new Layer(6);
-
-      assert(!layer1.compareTo(layer2));
-    });
-
-    it('Compare 2 different but similar Layers', function() {
-      let layer1 = new Layer(10);
-      let layer2 = new Layer(10);
-
-      assert(!layer1.compareTo(layer2));
-    });
-
-    it('Compare 2 identical Layers', function() {
-      let layer1 = new Layer(10);
-      let layer2 = Layer.fromJson(layer1.toJson());
-
-      assert(layer1.compareTo(layer2));
-    });
-  })
-
   describe('Neuron', function() {
-    it('Compare 2 different Layers', function() {
+    it('Compare 2 different Neurons', function() {
       let neuron1 = new Neuron();
       let neuron2 = new Neuron();
 
       assert(!neuron1.compareTo(neuron2));
     });
 
-    it('Compare 2 identical Layers', function() {
-      let neuron1 = new Neuron(10);
+    it('Compare 2 identical Neurons', function() {
+      let neuron1 = new Neuron();
       let neuron2 = Neuron.fromJson(neuron1.toJson());
       assert(neuron1.compareTo(neuron2));
     });
@@ -213,34 +189,10 @@ describe('Test Trainer options parser', function() {
 })
 
 describe('Test error handler', function() {
-  describe('Trainer', function() {
-    it('Test train empty network', function() {
-      let network = new Network();
-      let trainer = new Trainer(network);
-      let epoch = 5;
-
-      assert.throws(trainer.XOR, TypeError);
-    });
-  })
-
   describe('Layer', function() {
     it('Test create empty Layer', function() {
       let createLayer = () => new Layer();
       assert.throws(createLayer, ValueError);
-    });
-
-    it('Test activate Layer with wrong number of inputs', function() {
-      let layer = new Layer(5);
-      let activate = () => layer.activate([0,0,0]);
-
-      assert.throws(activate, ValueError);
-    });
-
-    it('Test propagate Layer with wrong number of inputs', function() {
-      let layer = new Layer(5);
-      let propagate = () => layer.propagate(0.1, [0,0,0]);
-
-      assert.throws(propagate, ValueError);
     });
 
     it('Test project on non-Layer object: array', function() {
@@ -251,16 +203,8 @@ describe('Test error handler', function() {
     });
 
     it('Test project on non-Layer object: object', function() {
-      let layer = new Layer(5);
+      let layer = new Layer(5); 
       let project = () => layer.project({});
-      
-      assert.throws(project, ValueError);
-    });
-
-    it('Test project on non-Layer object: Network', function() {
-      let layer = new Layer(5);
-      let network = new Network();
-      let project = () => layer.project(network);
       
       assert.throws(project, ValueError);
     });
@@ -274,77 +218,54 @@ describe('Test functionality', function() {
     }, 0);
   }
 
-  describe('MasterNetwork', function() {
+  describe('Network', function() {
     it('Test XOR operation', function() {
-      let per1 = new Perceptron(2, [], 10);
-      let per2 = new Perceptron(10, [], 2);
-      let per3 = new Perceptron(10, [], 2);
-      let per4 = new Perceptron(2, [], 1);
-      let per5 = new Perceptron(2, [], 1);
+      let input = new Layer(2);
+      let hidden = new Layer(20);
+      let output = new Layer(1);
 
-      per1.project(per2);
-      per1.project(per3);
-      per2.project(per4);
-      per3.project(per4);
+      input.project(hidden);
+      hidden.project(output);
 
-      let network = new MasterNetwork(per2);
-      network.ready();
-      let fs = require('fs')
-      let trainer = new Trainer(network);
-      let error = 0.1;
-
-      let result = trainer.XOR({
-        shuffle: true,
-        momentum: 0.99,
-        rate: 0.5,
-        error
+      let network = new Network({
+        input: input.neurons,
+        output: output.neurons
       });
 
+      let trainer = new Trainer(network);
+      let result = trainer.XOR();
       assert(result.error < 0.1);
-      let errorBound = Math.sqrt(error);
+      let errorBound = Math.sqrt(0.1);
 
       assert(Math.abs(sum(network.activate([0, 0])) - 0) < errorBound);
       assert(Math.abs(sum(network.activate([1, 0])) - 1) < errorBound);
       assert(Math.abs(sum(network.activate([0, 1])) - 1) < errorBound);
       assert(Math.abs(sum(network.activate([1, 1])) - 0) < errorBound);
-
-      this.retries(5);
+      this.retries(3);
     });
 
     it('Test AND operation', function() {
-      let per1 = new Perceptron(2, [], 10);
-      let per2 = new Perceptron(10, [], 2);
-      let per3 = new Perceptron(10, [], 2);
-      let per4 = new Perceptron(2, [], 1);
-      let per5 = new Perceptron(2, [], 1);
+      let input = new Layer(2);
+      let hidden = new Layer(20);
+      let output = new Layer(1);
 
-      per1.project(per2);
-      per1.project(per3);
-      per2.project(per4);
-      per3.project(per4);
+      input.project(hidden);
+      hidden.project(output);
 
-      let network = new MasterNetwork(per2);
-      network.ready();
-      let fs = require('fs')
-      let trainer = new Trainer(network);
-      let error = 0.1;
-
-      let result = trainer.AND({
-        shuffle: true,
-        momentum: 0.99,
-        rate: 0.5,
-        error
+      let network = new Network({
+        input: input.neurons,
+        output: output.neurons
       });
-
+      let trainer = new Trainer(network);
+      let result = trainer.AND();
       assert(result.error < 0.1);
-      let errorBound = Math.sqrt(error);
+      let errorBound = Math.sqrt(0.1);
 
       assert(Math.abs(sum(network.activate([0, 0])) - 0) < errorBound);
       assert(Math.abs(sum(network.activate([1, 0])) - 0) < errorBound);
       assert(Math.abs(sum(network.activate([0, 1])) - 0) < errorBound);
       assert(Math.abs(sum(network.activate([1, 1])) - 1) < errorBound);
-
-      this.retries(5);
+      this.retries(3);
     });
   })
 

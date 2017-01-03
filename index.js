@@ -11,5 +11,6 @@ let Layer = require('./lib/layer').Layer;
 let ValueError = require('./lib/errors').ValueError;
 
 module.exports = {
-  Perceptron, Trainer, Cost, Neuron, squash, Connection, Network, Layer, ValueError
+  Perceptron, Trainer, Cost, Neuron, squash, Connection, 
+  Network, Layer, ValueError
 };

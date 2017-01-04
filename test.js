@@ -2,12 +2,13 @@
 
 let assert = require('assert');
 let fs = require('fs');
-let Network = require('./').Network;
-let Perceptron = require('./').Perceptron;
-let Trainer = require('./').Trainer;
-let Layer = require('./').Layer;
-let ValueError = require('./').ValueError;
-let Neuron = require('./').Neuron;
+let mentality = require('./');
+let Network = mentality.Network;
+let Perceptron = mentality.Perceptron;
+let Trainer = mentality.Trainer;
+let Layer = mentality.Layer;
+let ValueError = mentality.MentaliryError.ValueError;
+let Neuron = mentality.Neuron;
 
 
 describe('Test fromJson/toJson', function() {
@@ -221,7 +222,7 @@ describe('Test functionality', function() {
   describe('Network', function() {
     it('Test XOR operation', function() {
       let input = new Layer(2);
-      let hidden = new Layer(20);
+      let hidden = new Layer(2);
       let output = new Layer(1);
 
       input.project(hidden);
@@ -246,7 +247,7 @@ describe('Test functionality', function() {
 
     it('Test AND operation', function() {
       let input = new Layer(2);
-      let hidden = new Layer(20);
+      let hidden = new Layer(2);
       let output = new Layer(1);
 
       input.project(hidden);
@@ -271,7 +272,7 @@ describe('Test functionality', function() {
 
   describe('Perceptron', function() {
     it('Test XOR operation', function() {
-      let network = new Perceptron(2, [20], 1);
+      let network = new Perceptron(2, [2], 1);
       let trainer = new Trainer(network);
       let result = trainer.XOR();
       assert(result.error < 0.1);
@@ -285,7 +286,7 @@ describe('Test functionality', function() {
     });
 
     it('Test AND operation', function() {
-      let network = new Perceptron(2, [20], 1);
+      let network = new Perceptron(2, [2], 1);
       let trainer = new Trainer(network);
       let result = trainer.AND();
       assert(result.error < 0.1);

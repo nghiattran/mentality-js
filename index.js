@@ -7,9 +7,9 @@ let Cost = require('./lib/trainer').Cost;
 let Neuron = require('./lib/neuron').Neuron;
 let Connection = require('./lib/connection').Connection;
 let Layer = require('./lib/layer').Layer;
-let MentaliryError = require('./lib/errors');
+let Error = require('./lib/errors');
 
 module.exports = {
   Perceptron, Trainer, Cost, Neuron, Connection, 
-  Network, Layer, MentaliryError
+  Network, Layer, Error
 };

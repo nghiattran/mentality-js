@@ -7,7 +7,7 @@ let Network = mentality.Network;
 let Perceptron = mentality.Perceptron;
 let Trainer = mentality.Trainer;
 let Layer = mentality.Layer;
-let ValueError = mentality.MentaliryError.ValueError;
+let ValueError = mentality.Error.ValueError;
 let Neuron = mentality.Neuron;
 
 

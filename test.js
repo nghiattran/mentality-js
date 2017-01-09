@@ -192,20 +192,26 @@ describe('Test Trainer options parser', function() {
 describe('Test error handler', function() {
   describe('Layer', function() {
     it('Test create empty Layer', function() {
-      let createLayer = () => new Layer();
+      let createLayer = function() {
+        new Layer()
+      };
       assert.throws(createLayer, ValueError);
     });
 
     it('Test project on non-Layer object: array', function() {
       let layer = new Layer(5);
-      let project = () => layer.project([0,0,0]);
+      let project = function() {
+        layer.project([0,0,0])
+      };
       
       assert.throws(project, ValueError);
     });
 
     it('Test project on non-Layer object: object', function() {
       let layer = new Layer(5); 
-      let project = () => layer.project({});
+      let project = function() {
+        layer.project({});
+      }
       
       assert.throws(project, ValueError);
     });

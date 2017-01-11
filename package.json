@@ -22,7 +22,9 @@
   },
   "license": "MIT",
   "homepage": "",
-  "dependencies": {},
+  "dependencies": {
+    "synaptic": "^1.0.8"
+  },
   "devDependencies": {
     "coveralls": "^2.11.15",
     "istanbul": "^0.4.5",

@@ -1,12 +1,11 @@
 {
-  "name": "mentality",
+  "name": "mentality-js",
   "version": "0.0.0",
-  "description": "Dynamic-architecture neural network",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "cover": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec",
-    "report": "istanbul cover ./node_modules/mocha/bin/_mocha --report html -- -R spec"
+    "cover": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec"
   },
   "engines": {
     "node": ">=0.10.0"
@@ -14,9 +13,9 @@
   "files": [
     "index.js"
   ],
-  "repository": "nghiattran/mentality",
+  "repository": "nghiattran/mentality-js",
   "author": {
-    "name": "Nghia Tran",
+    "name": "nghiattran",
     "email": "nghiattran3@gmail.com",
     "url": ""
   },
@@ -24,9 +23,15 @@
   "homepage": "",
   "dependencies": {},
   "devDependencies": {
-    "coveralls": "^2.11.15",
-    "istanbul": "^0.4.5",
-    "mocha": "^3.2.0",
-    "mocha-lcov-reporter": "^1.2.0"
+    "coveralls": "2.11.2",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-sourcemaps": "^2.6.0",
+    "gulp-typescript": "^3.2.1",
+    "istanbul": "0.3.14",
+    "merge2": "^1.1.0",
+    "mocha": "2.2.5",
+    "mocha-lcov-reporter": "0.0.2"
   }
 }

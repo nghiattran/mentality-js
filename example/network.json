@@ -1,0 +1,34 @@
+{
+  "inputs": [{
+    "name": "image",
+    "type": "int",
+    "to": ["layer1"]
+  }, {
+    "name": "label",
+    "type": "list",
+    "to": []
+  }],
+  "layers": [{
+    "name": "layer1",
+    "type": "conv",
+    "activation": "relu",
+    "args": {
+      "filter": [3, 3, 64],
+      "strides": [1, 1],
+      "padding": [1, 1]
+    },
+    "to": ["layer2"]
+  }, {
+    "type": "conv",
+    "name": "layer2",
+    "activation": "relu",
+    "args": {
+      "filter": [2, 2],
+      "strides": [2, 2],
+      "padding": [0, 0]
+    }
+  }],
+  "configure": {
+
+  }
+}

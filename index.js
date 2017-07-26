@@ -1,8 +1,9 @@
 'use strict';
 
 module.exports = {
-  Network: require('./lib/network'),
-  Node: require('./lib/node'),
-  Layer: require('./lib/layer'),
-  Op: require('./lib/op')
+  Node: require('./src/node'),
+  Variable: require('./src/variable'),
+  Graph: require('./src/graph'),
+  utils: require('./src/utils'),
+  Tensorflow: require('./src/tensorflow')
 }

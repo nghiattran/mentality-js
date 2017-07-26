@@ -21,7 +21,10 @@
   },
   "license": "MIT",
   "homepage": "",
-  "dependencies": {},
+  "dependencies": {
+    "sprintf-js": "^1.1.1",
+    "toposort": "^1.0.3"
+  },
   "devDependencies": {
     "coveralls": "2.11.2",
     "gulp": "^3.9.1",

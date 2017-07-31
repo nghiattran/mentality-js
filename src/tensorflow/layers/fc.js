@@ -1,5 +1,7 @@
 'use strict';
 
+const nnstats = require('nnstats');
+
 const Layer = require('./layer');
 const ops = require('../ops');
 const FunctionCall = ops.FunctionCall;
@@ -7,37 +9,42 @@ const Assignment = ops.Assignment;
 const Variable = require('../../variable');
 const utils = require('../../utils');
 
+function flatten(input, neurons, name) {
+  let shape = [1];
+  for (var i = 0; i < input.shape.length; i++) {
+    shape[shape.length - 1] *= input.shape[i];
+  }
+
+  let flatten = new Variable(`${name}_flatten`, shape[shape.length - 1]);
+  let parameters = {
+    tensor: input,
+    shape: [-1, neurons]
+  }
+  let assign = FunctionCall.assign(flatten, 'tf.reshape');
+
+  return assign;
+}
+
 module.exports = class FC extends Layer {
   constructor(args, input) {
     args.name = args.name || utils.getName('fc');
-    if (utils.isArray(input.shape)) {
-      let flattenOp = this.flatten(input, args.neurons);
-      input = flattenOp.variable;
-      flattenOp.link(input);
-    }
 
     super(args.name, input);
 
-    this.neurons = args.neurons;
+    // if (utils.isArray(input.shape)) {
+    //   let flattenOp = flatten(input, args.neurons, args.name);
+    //   input = flattenOp.variable;
+    //   this.addNode(flattenOp);
+    //   this.input = flattenOp.variable
+    // }
 
-    this.addWeightAndBias([-1, args.neurons]);
-
-    let tranformation = new FunctionCall('tf.matmul', [input, this.weight]);
-    this.set(args.filter, args.activation, tranformation);
   }
 
-  flatten(input, neurons) {
-    let flatten = new Variable(`${this.name}_flatten`);
-    let parameters = {
-      tensor: input,
-      shape: [-1, neurons]
-    }
-    let assign = FunctionCall.assign(flatten, 'tf.reshape');
-
-    return assign;
+  getShape() {
+    return this.stats.output;
   }
 
   generate(graph, opts) {
-    this.generateWith(graph, opts);
+    // this.generateWith(graph, opts);
   }
 }

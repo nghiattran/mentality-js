@@ -22,6 +22,7 @@
   "license": "MIT",
   "homepage": "",
   "dependencies": {
+    "nnstats": "0.0.8",
     "sprintf-js": "^1.1.1",
     "toposort": "^1.0.3"
   },

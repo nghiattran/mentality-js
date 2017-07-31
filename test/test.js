@@ -41,7 +41,7 @@ const TFLayers = mentalityJs.Tensorflow.layers;
 
 // graph.compile();
 
-let image = new mentalityJs.Variable('image');
+let image = new mentalityJs.Variable('image', [28, 28, 3]);
 let graph = new TFGraph();
 
 let layer1 = new TFLayers.Conv({

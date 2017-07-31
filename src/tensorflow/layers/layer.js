@@ -1,5 +1,6 @@
 'use strict';
 
+const utils = require('../../utils');
 const Node = require('../../node');
 const ops = require('../ops');
 const Variable = require('../../variable');
@@ -7,6 +8,7 @@ const activations = ops.activations;
 const With = ops.With;
 const FunctionCall = ops.FunctionCall;
 const Assignment = ops.Assignment;
+
 
 let cnt = 0;
 
@@ -19,59 +21,56 @@ module.exports = class Layer extends Node {
   }
 
   addWeightAndBias(weightShape) {
+    this.weightShape = weightShape;
     // weight
-    this.weightAssignment = FunctionCall.createVariable('tf.get_variable',{
-      name: `${this.name}_w`, 
-      shape: weightShape
-    });
-    this.weight = this.weightAssignment.variable;
+    // graph.writer.emitLine(
+    //   `${this.name}_w = tf.get_variable(${this.name}_w, shape=${utils.toString(weightShape)})`
+    // );
 
-    // bias
-    let biasShape = [weightShape[weightShape.length-1]];
-    this.biasAssignment = FunctionCall.createVariable('tf.get_variable',{
-      name: `${this.name}_b`, 
-      shape: biasShape
-    });
-    this.bias = this.biasAssignment.variable;
-
-    this.addNodes([this.weightAssignment, this.biasAssignment]);
+    // // bias
+    // let biasShape = [weightShape[weightShape.length-1]];
+    // graph.writer.emitLine(
+    //   `${this.name}_b = tf.get_variable(${this.name}_b, shape=${utils.toString(biasShape)})`
+    // );
   }
 
   addActivation(activation) {
     // state
-    this.state = new Variable(`${this.name}_h`);
+    this.state = new Variable(`${this.name}_h`, this.getShape());
     let actOp = new activations[activation](this.state, `${this.name}_activation`);
-    this.output = new Assignment(this.state, actOp);
-    this.addNode(this.output);
+    let outputOp = new Assignment(this.state, actOp);
+    this.addNode(outputOp);
+
+    return outputOp;
   }
 
-  set(weightShape, activation, transformation) {
-    this.addActivation(activation);
+  set(graph, opts) {
 
-    let transAssign = new Assignment(this.state, transformation);
-    this.weightAssignment.link(transAssign);
-
-    // Add bias
-    let addBiasAssign = FunctionCall.assign(this.state, 'tf.nn.bias_add', {
-      value: this.state,
-      bias: this.bias
-    })
-
-    this.biasAssignment.link(addBiasAssign);
-    transAssign.link(addBiasAssign);
-
-    this.addNodes(transAssign, addBiasAssign);
-
-    transAssign.link(this.output);
   }
 
   generateWith(graph, opts) {
-    this.withNode.generate(graph, opts);
-    graph.writer.emitNewline();
+    let weightShape = this.weightShape;
+
+    graph.writer.emitLine(`with tf.name_scope(${this.name}):`);
+    graph.writer.incIndent();
+    
+    graph.writer.emitLine(
+      `${this.name}_w = tf.get_variable(${this.name}_w, shape=${utils.toString(weightShape)})`
+    );
+
+    // bias
+    let biasShape = [weightShape[weightShape.length-1]];
+    graph.writer.emitLine(
+      `${this.name}_b = tf.get_variable(${this.name}_b, shape=${utils.toString(biasShape)})`
+    );
   }
 
   postcompile(graph, opts) {
     graph.writer.decIndent();
     graph.writer.emitNewline('');
+  }
+
+  getShape() {
+    throw Error('Not implemented')
   }
 }

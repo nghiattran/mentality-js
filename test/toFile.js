@@ -1,6 +1,7 @@
 'use strict';
 
 const assert = require('assert');
+const path = require('path');
 const mentalityJs = require('../');
 const json = require('../example/network.json');
 
@@ -10,6 +11,7 @@ const KerasSequenceGraph = mentalityJs.Keras.SequenceGraph;
 const utils = mentalityJs.utils;
 const KerasLayers = mentalityJs.Keras.layers;
 
+
 class Program {
   contructor() {}
 
@@ -17,7 +19,7 @@ class Program {
     this.graph = graph;
   }
 
-  compile(opts) {
+  compile(opts={}) {
     let writer = new mentalityJs.writers.FileWriter();
     opts.writer = writer;
 
@@ -42,15 +44,11 @@ class Program {
     let graphChildren = this.graph.children;
 
     function pyReturn(child) {
-      if (child instanceof KerasLayers.Layer)
-        return `'${child.output.name}': ${child.output.name}`;
-      else if (child instanceof mentalityJs.Variable)
-        return `'${child.name}': ${child.name}`;
-
-      throw Error(`Unrecognized object. Got ${child}`);
+      return `'${child.output.name}': ${child.output.name}`;
     }
 
     writer.emitLine(`return {${graphChildren.map(pyReturn).join(',')}}`);
+
   }
 }
 
@@ -81,11 +79,9 @@ let layer3 = new KerasLayers.Conv2D({
   "padding": "valid"
 });
 
-let layer4 = new KerasLayers.Conv2D({
+let layer4 = new KerasLayers.MaxPool2D({
   "type": "Conv",
-  "activation": "relu",
-  "filters": 48,
-  "kernelSize": [5, 5],
+  "poolSize": [4, 4],
   "strides": [2, 2],
   "padding": "valid"
 });
@@ -144,20 +140,13 @@ let compile = [];
 let layers = [layer0, layer1, layer2, layer3, layer4, layer5, layer6, layer7, layer8, layer9, layer10, layer11];
 
 let graph = new KerasSequenceGraph({
-  nodes: layers
-});
-
-// graph.addNodes(layers);
-
-layers.map((e) => {
-  if (e instanceof KerasLayers.Layer)
-    console.log(e.name, e.output.shape); 
-  else if (e instanceof mentalityJs.Variable)
-    console.log(e.name, e.shape); 
-})
-
-let program = new Program();
-program.setGraph(graph);
-program.compile({
+  nodes: layers,
   nameScope: 'Network',
 });
+
+
+// console.log(utils.toJson(graph));
+
+graph.toFile(path.join(__dirname, 'graph.json'));
+
+console.log(graph.getName());

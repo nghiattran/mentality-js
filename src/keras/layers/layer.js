@@ -1,25 +1,27 @@
-'use strict';
-
-const utils = require('../../utils/utils');
 const Node = require('../../node');
 const Variable = require('../../variable');
 
 module.exports = class Layer extends Node {
-  constructor({name}) {
+  constructor({ name }) {
     super(name);
   }
 
   setInput(input) {
-    if (!input || !(input instanceof Variable)) return;
+    if (!input || !(input instanceof Variable)) {
+      return;
+    }
 
     this.input = input;
 
     this.output = new Variable(`${this.name}_h`, this.computeOutputShape());
+
+    this.link(this.output);
+    input.link(this);
   }
-  
+
   addWeights(args) {
     const {
-      useBias=true,
+      useBias = true,
       activation,
       kernelInitializer,
       biasInitializer,
@@ -43,7 +45,7 @@ module.exports = class Layer extends Node {
 
   getWeightsJson() {
     return {
-      biasInitializer: this.biasInitializer,
+      kernelInitializer: this.kernelInitializer,
       biasInitializer: this.biasInitializer,
       useBias: this.useBias,
       activation: this.activation,
@@ -51,15 +53,15 @@ module.exports = class Layer extends Node {
       biasRegularizer: this.biasRegularizer,
       activityRegularizer: this.activityRegularizer,
       kernelConstraint: this.kernelConstraint,
-      biasConstraint: this.biasConstraint
-    }
+      biasConstraint: this.biasConstraint,
+    };
   }
 
   computeOutputShape() {
     throw Error('Unimplementdd.');
   }
 
-  toJson(opts={}) {
+  toJson(opts = {}) {
     throw Error('Unimplementdd');
   }
-}
+};

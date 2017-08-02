@@ -1,11 +1,9 @@
-'use strict';
+const utils = require('./utils/utils');
 
-const utils = require('./utils/utils')
-
-let names = new Set();
+const names = new Set();
 
 module.exports = class Node {
-  constructor(name) {
+  constructor(name = utils.getName(this.getType())) {
     if (names.has(name)) throw Error(`This name has bean used: ${name}`);
 
     names.add(name);
@@ -16,13 +14,13 @@ module.exports = class Node {
   }
 
   link(node) {
-    if (!node instanceof Node) throw ValueError('Argument must be an instance of Node.');
+    if (!(node instanceof Node)) throw Error('Argument must be an instance of Node.');
 
     this.to.push(node);
   }
 
-  compile(graph={}, opts={}) {
-    utils.compile(this, graph, opts);
+  compile(writer, opts = {}) {
+    utils.compile(this, writer, opts);
   }
 
   build() {
@@ -38,6 +36,10 @@ module.exports = class Node {
   }
 
   toJson() {
-    throw Error('Not implemented.')
+    throw Error('Not implemented.');
   }
-}
+
+  getType() {
+    return this.constructor.name;
+  }
+};

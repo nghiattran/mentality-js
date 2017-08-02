@@ -1,5 +1,3 @@
-'use strict';
-
 const fs = require('fs');
 const path = require('path');
 
@@ -7,7 +5,7 @@ const sprintf = require('sprintf-js').sprintf;
 const utils = require('../utils/utils');
 
 module.exports = class FileWriter {
-  constructor(filename=path.join('archs', 'architect.py'), args={}) {
+  constructor(filename = path.join('archs', 'architect.py'), args = {}) {
     this.stream = fs.createWriteStream(filename);
     this.indent = 0;
     this.isNewline = true;
@@ -37,26 +35,30 @@ module.exports = class FileWriter {
   }
 
   emitLines(lines) {
-    for (var i = 0; i < lines.length; i++) {
+    for (let i = 0; i < lines.length; i += 1) {
       this.emitLine(lines[i]);
     }
   }
 
   emitFunctionCall(lines) {
-    const {mode='beautify'} = this.args;
+    function trim(entry) {
+      return entry.trim();
+    }
+
+    let newLines = lines;
+    const {
+      mode = 'beautify',
+    } = this.args;
 
     if (mode === 'beautify') {
-      lines = utils.allignArguments(lines);
-      for (var i = 0; i < lines.length; i++) {
-        this.emitLine(lines[i]);
+      newLines = utils.allignArguments(newLines);
+      for (let i = 0; i < newLines.length; i += 1) {
+        this.emitLine(newLines[i]);
       }
-    } else if (mode === 'compat'){
-      function trim(entry) {
-        return entry.trim();
-      }
-      lines = lines.split('\n');
-      lines = lines.map(trim);
-      this.emitLine(lines.join(' '));
+    } else if (mode === 'compat') {
+      newLines = newLines.split('\n');
+      newLines = newLines.map(trim);
+      this.emitLine(newLines.join(' '));
     } else {
       throw Error(`Unrecognized writer mode. Got: ${mode}`);
     }
@@ -73,4 +75,4 @@ module.exports = class FileWriter {
   close() {
     this.stream.end();
   }
-}
+};

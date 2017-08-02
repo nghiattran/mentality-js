@@ -94,7 +94,7 @@ let layer0 = new KerasLayers.Reshape({
 
 let layer1 = new KerasLayers.Input({})
 
-let layer2 = new KerasLayers.Conv({
+let layer2 = new KerasLayers.Conv2D({
   "type": "Conv",
   "activation": "relu",
   "filters": 24,
@@ -103,7 +103,7 @@ let layer2 = new KerasLayers.Conv({
   "padding": "valid"
 });
 
-let layer3 = new KerasLayers.Conv({
+let layer3 = new KerasLayers.Conv2D({
   "type": "Conv",
   "activation": "relu",
   "filters": 36,
@@ -112,16 +112,14 @@ let layer3 = new KerasLayers.Conv({
   "padding": "valid"
 });
 
-let layer4 = new KerasLayers.Conv({
+let layer4 = new KerasLayers.MaxPool2D({
   "type": "Conv",
-  "activation": "relu",
-  "filters": 48,
-  "kernelSize": [5, 5],
+  "poolSize": [4, 4],
   "strides": [2, 2],
   "padding": "valid"
 });
 
-let layer5 = new KerasLayers.Conv({
+let layer5 = new KerasLayers.Conv2D({
   "type": "Conv",
   "activation": "relu",
   "filters": 64,
@@ -130,7 +128,7 @@ let layer5 = new KerasLayers.Conv({
   "padding": "valid"
 });
 
-let layer6 = new KerasLayers.Conv({
+let layer6 = new KerasLayers.Conv2D({
   "type": "Conv",
   "activation": "relu",
   "filters": 64,
@@ -179,9 +177,9 @@ let graph = new KerasSequenceGraph({
   nameScope: 'Network',
 });
 
-// layers.map((e) => {
-//   console.log(e.name, e.output.shape); 
-// })
+layers.map((e) => {
+  console.log(e.name, e.getType(), e.output.shape); 
+})
 
 let program = new Program();
 program.setGraph(graph);

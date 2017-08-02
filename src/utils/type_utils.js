@@ -1,19 +1,17 @@
-'use strict';
-
 function isString(str) {
   return typeof str === 'string' || str instanceof String;
 }
 
-function isInteger(value) {
-  return Util.isFloat(value) && Math.floor(value) === value;
+function isNumber(value) {
+  return typeof value === 'number';
 }
 
 function isFloat(value) {
-  return Util.isNumber(value) && isFinite(value);
+  return isNumber(value) && isFinite(value);
 }
 
-function isNumber(value) {
-  return typeof value === 'number';
+function isInteger(value) {
+  return isFloat(value) && Math.floor(value) === value;
 }
 
 function isDigit(n) {
@@ -21,25 +19,31 @@ function isDigit(n) {
 }
 
 function isLetter(char) {
-  return isString(str) && /^[a-zA-Z]/.test(char) && char.length === 1;
+  return isString(char) && /^[a-zA-Z]/.test(char) && char.length === 1;
 }
 
 function isLetterOrDigit(char) {
-    return isDigit(char) || isLetter(char);
+  return isDigit(char) || isLetter(char);
 }
 
 function isArray(val) {
-  return val && val.constructor === Array
+  return val && val.constructor === Array;
 }
 
 function isObject(val) {
   return val && val instanceof Object;
 }
 
-function getNumericValue(aString) {
-    return Number(aString)
-}
-
 module.exports = {
-  isInteger, isLetter, isFloat, isFinite, isNaN, isDigit, isString, isArray, isObject
-}
+  isNumber,
+  isInteger,
+  isDigit,
+  isLetter,
+  isLetterOrDigit,
+  isFloat,
+  isFinite,
+  isNaN,
+  isString,
+  isArray,
+  isObject,
+};

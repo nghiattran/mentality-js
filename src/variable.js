@@ -1,7 +1,4 @@
-'use strict';
-
 const Node = require('./node');
-const utils = require('./utils/utils');
 
 module.exports = class Variable extends Node {
   constructor(name, shape) {
@@ -11,4 +8,4 @@ module.exports = class Variable extends Node {
   }
 
   build() {}
-}
+};

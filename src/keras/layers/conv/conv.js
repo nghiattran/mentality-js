@@ -1,23 +1,9 @@
-'use strict';
+const Layer = require('../layer');
+const utils = require('../../../utils/utils');
 
-const _ = require('lodash');
-
-const Layer = require('./layer');
-const Variable = require('../../variable');
-const utils = require('../../utils/utils');
-
-let defaultOpts = {
-  filters: undefined,
-  kernelSize: undefined,
-  strides:[1,1],
-  padding:'same',
-  dataFormat:'channels_last',
-  dilationRate:[1, 1]
-}
 
 module.exports = class Conv extends Layer {
   constructor(args, input) {
-    args.name = args.name || utils.getName('conv');
     super(args);
 
     this.addWeights(args);
@@ -25,11 +11,10 @@ module.exports = class Conv extends Layer {
     const {
       filters,
       kernelSize,
-      strides=[1,1],
-      padding='same',
-      dataFormat='channels_last',
-      dilationRate=[1, 1],
-      name=utils.getName('conv')
+      strides = [1, 1],
+      padding = 'same',
+      dataFormat = 'channels_last',
+      dilationRate = [1, 1],
     } = args;
 
     this.filters = filters;
@@ -44,41 +29,45 @@ module.exports = class Conv extends Layer {
 
   computeOutputShape() {
     if (this.dataFormat === 'channels_last') {
-      let space = this.input.shape.slice(1, this.input.shape.length - 1);
-      let newSpace = [];
+      const space = this.input.shape.slice(1, this.input.shape.length - 1);
+      const newSpace = [];
 
-      for (let i = 0; i < space.length; i++) {
-        let newDim = utils.computeConvOutputLength({
+      for (let i = 0; i < space.length; i += 1) {
+        const newDim = utils.computeConvOutputLength({
           inputLength: space[i],
           filterSize: this.kernelSize[i],
           padding: this.padding,
           stride: this.strides[i],
-          dilation: this.dilationRate[i]
-        })
+          dilation: this.dilationRate[i],
+        });
+
         newSpace.push(newDim);
       }
       return [this.input.shape[0]].concat(newSpace).concat(this.filters);
     } else if (this.dataFormat === 'channels_first') {
-      let space = this.input.shape.slice(2);
-      let newSpace = [];
+      const space = this.input.shape.slice(2);
+      const newSpace = [];
 
-      for (let i = 0; i < space.length; i++) {
-        let newDim = utils.computeConvOutputLength({
+      for (let i = 0; i < space.length; i += 1) {
+        const newDim = utils.computeConvOutputLength({
           inputLength: space[i],
           filterSize: this.kernelSize[i],
           padding: this.padding,
           stride: this.strides[i],
-          dilation: this.dilationRate[i]
-        })
+          dilation: this.dilationRate[i],
+        });
+
         newSpace.push(newDim);
       }
 
       return [this.input.shape[0]].concat(this.filters).concat(newSpace);
     }
+
+    throw Error(`Unrecognized data format. Get ${this.dataFormat}`);
   }
 
-  build(graph, opts) {
-    let lines = `${this.output.name} = keras.layers.Conv2D(filters=${this.filters},
+  build(writer, opts) {
+    const lines = `${this.output.name} = keras.layers.${this.getType()}(filters=${this.filters},
     kernel_size=${utils.toString(this.kernelSize)},
     strides=${utils.toString(this.strides)},
     padding='${this.padding}',
@@ -94,12 +83,12 @@ module.exports = class Conv extends Layer {
     kernel_constraint=${utils.toString(this.kernelConstraint)},
     bias_constraint=${utils.toString(this.biasConstraint)})(${this.input.name})`;
 
-    graph.writer.emitFunctionCall(lines);
-    graph.writer.emitNewline();
+    writer.emitFunctionCall(lines);
+    writer.emitNewline();
   }
 
-  toJson(opts={}) {
-    let json = super.getWeightsJson();
+  toJson(opts = {}) {
+    const json = this.getWeightsJson();
     json.filters = this.filters;
     json.kernelSize = this.kernelSize;
     json.strides = this.strides;
@@ -111,4 +100,4 @@ module.exports = class Conv extends Layer {
 
     return json;
   }
-}
+};

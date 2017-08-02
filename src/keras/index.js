@@ -1,7 +1,9 @@
-'use strict';
+const Graph = require('./tf_graph');
+const SequenceGraph = require('./tf_sequence_graph');
+const layers = require('./layers');
 
 module.exports = {
-  Graph: require('./graph'),
-  SequenceGraph: require('./sequence_graph'),
-  layers: require('./layers')
-}
+  Graph,
+  SequenceGraph,
+  layers,
+};

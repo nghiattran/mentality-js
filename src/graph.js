@@ -1,12 +1,13 @@
 'use strict';
 
-const fs = require('fs');
-
 const utils = require('./utils');
 const FileWriter = require('./writers/filewriter');
+const Node = require('./node');
 
-module.exports = class Graph {
-  constructor() {
+module.exports = class Graph extends Node {
+  constructor(name=utils.getName('graph')) {
+    super(name);
+    
     this.children = [];
     this.startNodes = [];
   }
@@ -22,12 +23,28 @@ module.exports = class Graph {
   }
 
   compile(opts={}) {
+    const {path, writer, writerOpts={}} = opts;
+
+    let isNewWriter = writer ? false : true;
+
     let graph = {
-      writer: new FileWriter()
+      writer: writer || new FileWriter(path, writerOpts)
     };
 
     utils.compile(this, graph, opts);
 
-    graph.writer.close();
+    if (isNewWriter) graph.writer.close();
+  }
+
+  toJson(opts={}) {
+    let sortedNodes = utils.sortChildren(this.children, opts.silent);
+    
+    let json = {
+      children: [],
+    }
+    for (let i = 0; i < sortedNodes.length; i++) {
+      json.children.push(toJson(sortedNodes[i], opts));
+    }
+    return json;
   }
 }

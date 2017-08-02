@@ -57,7 +57,7 @@ function getName(prefix) {
   }
 }
 
-function unroll(heads, silent=true) {
+function sortChildren(heads, silent=true) {
   let stack = heads.slice();
   let edges = [];
   let resolved = new Set();
@@ -85,18 +85,105 @@ function unroll(heads, silent=true) {
   }
 }
 
-function compile(node, graph, opts={}) {
-  if ('precompile' in node) node.precompile(graph, opts);
+function unroll(rootNode, opts={}) {
+  let queue = [rootNode];
+  let sequence = [];
 
-  let sortedNodes = unroll(node.children, opts.silent);
+  while (queue.length > 0) {
+    let node = queue.shift();
+    let sortedNodes = sortChildren(node.children, opts.silent);
+    queue.unshift(...sortedNodes);
+    sequence.push(node);
+  }
+  return sequence;
+}
+
+// function compile(node, graph, opts={}) {
+//   let nodes = unroll(node, opts);
+
+//   for (var i = 0; i < nodes.length; i++) {
+//     let node = nodes[i];
+//     if ('preCompile' in node) node.preCompile(graph, opts);
+
+//     node.build(graph, opts);
+
+//     if ('postCompile' in node) node.postCompile(graph, opts);
+//   }
+// }
+
+function toJson(node, opts={}) {
+  let sortedNodes = sortChildren(node.children, opts.silent);
   
-  node.generate(graph, opts);
+  let json = node.toJson(graph, opts);
+  json.children = [];
+  for (let i = 0; i < sortedNodes.length; i++) {
+    json.children.push(toJson(sortedNodes[i], opts));
+  }
+  return json;
+}
+
+function compile(node, graph, opts={}) {
+  if ('preCompile' in node) node.preCompile(graph, opts);
+
+  let sortedNodes = sortChildren(node.children, opts.silent);
+  
+  node.build(graph, opts);
 
   for (let i = 0; i < sortedNodes.length; i++) {
     sortedNodes[i].compile(graph, opts);
   }
 
-  if ('postcompile' in node) node.postcompile(graph, opts);
+  if ('postCompile' in node) node.postCompile(graph, opts);
+}
+
+function allignArguments(funcCall) {
+  let lines = funcCall.split('\n');
+  let index = 0;
+  while (lines[0][index] != '(') {
+    index += 1;
+  }
+  index += 1;
+  
+  for (let i = 1; i < lines.length; i++) {
+    lines[i] = ' '.repeat(index) + lines[i].trim();
+  }
+  return lines;
+}
+
+
+/**
+ * Determines output length of a convolution given input length. Based on https://github.com/fchollet/keras/blob/master/keras/utils/conv_utils.py#L90
+ * @param  {Object} args  inputLength: integer.
+                          filterSize: integer.
+                          padding: one of "same", "valid", "full".
+                          stride: integer.
+                          dilation: dilation rate, integer.
+ * @return {Number}       The output length (integer).
+ */
+function computeConvOutputLength(args) {
+  const {inputLength, filterSize, padding, stride, dilation=1} = args;
+
+  if (!inputLength) return;
+
+  let dilatedFilterSize = filterSize + (filterSize - 1) * (dilation - 1);
+
+  let outputLength;
+  switch (padding.toLowerCase()) {
+    case 'same':
+    case 'causal':
+      outputLength = inputLength;
+      break;
+    case 'valid':
+      outputLength = inputLength - dilatedFilterSize + 1;
+      break;
+    case 'full':
+      outputLength = inputLength + dilatedFilterSize - 1;
+      break;
+    default:
+      throw Error(`Unrecognized value for padding. Got ${padding}`);
+  }
+
+  return Math.floor((outputLength + stride - 1) / stride);
 }
 
 function toString(value) {
@@ -115,9 +202,6 @@ function toString(value) {
   }
 
   if (isObject(value)) {
-    // TODO: this line is a bit hacky but needed since NodeJS doesn't like circular dependency
-    if (value.constructor.name === 'Variable') return value.name;
-
     return JSON.stringify(value);
   }  
 
@@ -125,6 +209,6 @@ function toString(value) {
 }
 
 module.exports = {
-  unroll, compile, getName,
-  isInteger, isLetter, isFloat, isFinite, isNaN, isDigit, isString, isArray, isObject, toString
+  sortChildren, compile, getName, allignArguments, computeConvOutputLength, unroll, toString, 
+  isInteger, isLetter, isFloat, isFinite, isNaN, isDigit, isString, isArray, isObject
 }

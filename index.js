@@ -5,5 +5,8 @@ module.exports = {
   Variable: require('./src/variable'),
   Graph: require('./src/graph'),
   utils: require('./src/utils'),
-  Tensorflow: require('./src/tensorflow')
+  Keras: require('./src/keras'),
+  writers: {
+    FileWriter: require('./src/writers/filewriter')
+  }
 }

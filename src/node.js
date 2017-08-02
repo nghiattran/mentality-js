@@ -21,12 +21,12 @@ module.exports = class Node {
     this.to.push(node);
   }
 
-  compile(graph, opts) {
+  compile(graph={}, opts={}) {
     utils.compile(this, graph, opts);
   }
 
-  generate() {
-    throw Error('generate function must be implemented');
+  build() {
+    throw Error('build function must be implemented');
   }
 
   addNodes(nodes) {

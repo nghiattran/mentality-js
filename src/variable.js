@@ -9,4 +9,6 @@ module.exports = class Variable extends Node {
 
     this.shape = shape;
   }
+
+  build() {}
 }

@@ -52,7 +52,7 @@ class Program {
     this.graph = graph;
   }
 
-  compile(opts) {
+  compile(opts={}) {
     let writer = new mentalityJs.writers.FileWriter();
     opts.writer = writer;
 
@@ -85,13 +85,14 @@ class Program {
   }
 }
 
-let graph = new KerasSequenceGraph();
-let image = new mentalityJs.Variable('input', [100, 66, 200, 3]);
+let image = new mentalityJs.Variable(utils.getName('input'), [-1, 66, 200, 3]);
 
-let layer1 = new KerasLayers.Reshape({
+let layer0 = new KerasLayers.Reshape({
   "type": "Reshape",
   "targetShape": [66, 200, 3]
 }, image);
+
+let layer1 = new KerasLayers.Input({})
 
 let layer2 = new KerasLayers.Conv({
   "type": "Conv",
@@ -100,7 +101,7 @@ let layer2 = new KerasLayers.Conv({
   "kernelSize": [5, 5],
   "strides": [2, 2],
   "padding": "valid"
-}, layer1.output);
+});
 
 let layer3 = new KerasLayers.Conv({
   "type": "Conv",
@@ -109,7 +110,7 @@ let layer3 = new KerasLayers.Conv({
   "kernelSize": [5, 5],
   "strides": [2, 2],
   "padding": "valid"
-}, layer2.output);
+});
 
 let layer4 = new KerasLayers.Conv({
   "type": "Conv",
@@ -118,7 +119,7 @@ let layer4 = new KerasLayers.Conv({
   "kernelSize": [5, 5],
   "strides": [2, 2],
   "padding": "valid"
-}, layer3.output);
+});
 
 let layer5 = new KerasLayers.Conv({
   "type": "Conv",
@@ -127,7 +128,7 @@ let layer5 = new KerasLayers.Conv({
   "kernelSize": [3, 3],
   "strides": [1, 1],
   "padding": "valid"
-}, layer4.output);
+});
 
 let layer6 = new KerasLayers.Conv({
   "type": "Conv",
@@ -136,51 +137,56 @@ let layer6 = new KerasLayers.Conv({
   "kernelSize": [3, 3],
   "strides": [1, 1],
   "padding": "valid"
-}, layer5.output);
+});
 
 let layer7 = new KerasLayers.Flatten({
   "type": "flatten",
   "activation": "relu",
   "units": 1164
-}, layer6.output);
+});
 
 let layer8 = new KerasLayers.Dense({
   "type": "dense",
   "activation": "relu",
   "units": 1164
-}, layer7.output);
+});
 
 let layer9 = new KerasLayers.Dense({
   "type": "dense",
   "activation": "relu",
   "units": 100
-}, layer8.output);
+});
 
 let layer10 = new KerasLayers.Dense({
   "type": "dense",
   "activation": "relu",
   "units": 10
-}, layer9.output);
+});
 
 let layer11 = new KerasLayers.Dense({
   "name": "output",
   "type": "dense",
   "activation": "tanh",
   "units": 1
-}, layer10.output);
+});
 
 let compile = [];
 
-let layers = [layer1, layer2, layer3, layer4, layer5, layer6, layer7, layer8, layer9, layer10, layer11];
+let layers = [layer0, layer1, layer2, layer3, layer4, layer5, layer6, layer7, layer8, layer9, layer10, layer11];
 
-graph.addNodes(layers);
+let graph = new KerasSequenceGraph({
+  nodes: layers,
+  nameScope: 'Network',
+});
 
-layers.map((e) => {
-  console.log(e.name, e.output.shape); 
-})
+// layers.map((e) => {
+//   console.log(e.name, e.output.shape); 
+// })
 
 let program = new Program();
 program.setGraph(graph);
-program.compile({
-  nameScope: 'Network',
-});
+program.compile();
+
+// console.log(utils.toJson(graph));
+
+// graph.toFile('./graph.json');

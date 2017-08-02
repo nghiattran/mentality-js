@@ -1,8 +1,10 @@
 'use strict';
 
-const utils = require('./utils');
+const utils = require('./utils/utils');
 const FileWriter = require('./writers/filewriter');
 const Node = require('./node');
+const fs = require('fs');
+
 
 module.exports = class Graph extends Node {
   constructor(name=utils.getName('graph')) {
@@ -42,9 +44,15 @@ module.exports = class Graph extends Node {
     let json = {
       children: [],
     }
+
     for (let i = 0; i < sortedNodes.length; i++) {
-      json.children.push(toJson(sortedNodes[i], opts));
+      json.children.push(utils.toJson(sortedNodes[i], opts));
     }
+
     return json;
+  }
+
+  toFile(file, opts={}) {
+    fs.writeFile(file, JSON.stringify(this.toJson(opts), null, 4));
   }
 }

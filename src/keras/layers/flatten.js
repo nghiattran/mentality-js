@@ -2,7 +2,7 @@
 
 const Layer = require('./layer');
 const Variable = require('../../variable');
-const utils = require('../../utils');
+const utils = require('../../utils/utils');
 
 module.exports = class Flatten extends Layer {
   constructor(args={}, input) {
@@ -32,5 +32,13 @@ module.exports = class Flatten extends Layer {
 
     graph.writer.emitLine(line);
     graph.writer.emitNewline();
+  }
+
+  toJson(opt={}) {
+    let json = {
+      type: this.constructor.name,
+      name: this.name
+    }
+    return json;
   }
 }

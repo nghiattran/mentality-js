@@ -1,13 +1,14 @@
 'use strict';
 
-const utils = require('../utils');
+const utils = require('../utils/utils');
 const Graph = require('./graph');
 const Layer = require('./layers/layer');
 const Variable = require('../variable');
 
 module.exports = class SequenceGraph extends Graph {
-  constructor({nodes=[], name=utils.getName('sequencegraph')}) {
-    super(name);
+  constructor(opts={}) {
+    const {nodes=[], name=utils.getName('sequenceGraph')} = opts;
+    super(name, opts);
 
     this.addNodes(nodes)
   }

@@ -1,51 +1,10 @@
 'use strict';
 
 const toposort = require('./toposort');
-const Node = require('./node');
+const Node = require('../node');
+const typeUtils = require('./type_utils');
 
 let name = {};
-
-function isString(str) {
-  return typeof str === 'string' || str instanceof String;
-}
-
-function isInteger(value) {
-   return Util.isFloat(value) &&
-      Math.floor(value) === value;
-}
-
-function isFloat(value) {
-   return Util.isNumber(value) && 
-      isFinite(value);
-}
-
-function isNumber(value) {
-   return typeof value === 'number';
-}
-
-function isDigit(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n) && n.length === 1;
-}
-
-function isLetter(char) {
-    return /^[a-zA-Z]/.test(char) && char.length === 1;
-}
-
-function isLetterOrDigit(char) {
-    return isDigit(char) || isLetter(char);
-}
-
-function isArray(val) {
-  return val && val.constructor === Array
-}
-
-function isObject(val) {
-  return val && val instanceof Object;
-}
-
-function getNumericValue(aString) {
-    return Number(aString)
-}
 
 function getName(prefix) {
   if (prefix in name) {
@@ -98,23 +57,10 @@ function unroll(rootNode, opts={}) {
   return sequence;
 }
 
-// function compile(node, graph, opts={}) {
-//   let nodes = unroll(node, opts);
-
-//   for (var i = 0; i < nodes.length; i++) {
-//     let node = nodes[i];
-//     if ('preCompile' in node) node.preCompile(graph, opts);
-
-//     node.build(graph, opts);
-
-//     if ('postCompile' in node) node.postCompile(graph, opts);
-//   }
-// }
-
 function toJson(node, opts={}) {
   let sortedNodes = sortChildren(node.children, opts.silent);
   
-  let json = node.toJson(graph, opts);
+  let json = node.toJson(opts);
   json.children = [];
   for (let i = 0; i < sortedNodes.length; i++) {
     json.children.push(toJson(sortedNodes[i], opts));
@@ -187,21 +133,27 @@ function computeConvOutputLength(args) {
 }
 
 function toString(value) {
-  if (isArray(value)) {
-    let res = '';
-    for (var i = 0; i < value.length; i++) {
-      res += toString(value[i]);
+  if (typeof(value) === 'boolean') {
+    return value ? 'True' : 'False';
+  }
 
-      if (i < value.length - 1) res+= ', ';
-    }
+  if (value === undefined || value == null) {
+    return 'None';
+  }
+
+  if (typeUtils.isArray(value)) {
+    value = value.map((e) => {
+      return toString(e)
+    })
+    let res = value.join(', ');
     return `[${res}]`;
   }
 
-  if (isString(value)) {
+  if (typeUtils.isString(value)) {
     return `'${value}'`;
   }
 
-  if (isObject(value)) {
+  if (typeUtils.isObject(value)) {
     return JSON.stringify(value);
   }  
 
@@ -209,6 +161,5 @@ function toString(value) {
 }
 
 module.exports = {
-  sortChildren, compile, getName, allignArguments, computeConvOutputLength, unroll, toString, 
-  isInteger, isLetter, isFloat, isFinite, isNaN, isDigit, isString, isArray, isObject
+  sortChildren, compile, getName, allignArguments, computeConvOutputLength, unroll, toString, toJson
 }

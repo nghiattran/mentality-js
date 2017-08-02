@@ -1,8 +1,19 @@
 'use strict';
 
+const _ = require('lodash');
+
 const Layer = require('./layer');
 const Variable = require('../../variable');
-const utils = require('../../utils');
+const utils = require('../../utils/utils');
+
+let defaultOpts = {
+  filters: undefined,
+  kernelSize: undefined,
+  strides:[1,1],
+  padding:'same',
+  dataFormat:'channels_last',
+  dilationRate:[1, 1]
+}
 
 module.exports = class Conv extends Layer {
   constructor(args, input) {
@@ -74,16 +85,30 @@ module.exports = class Conv extends Layer {
     data_format='${this.dataFormat}',
     dilation_rate=${utils.toString(this.dilationRate)},
     activation='${this.activation}',
-    use_bias=${this.use_bias ? 'True' : 'False'},
+    use_bias=${utils.toString(this.useBias === true)},
     kernel_initializer='glorot_uniform',
     bias_initializer='zeros',
-    kernel_regularizer=${this.kernel_regularizer},
-    bias_regularizer=${this.bias_regularizer}, 
-    activity_regularizer=${this.activity_regularizer},
-    kernel_constraint=${this.kernel_constraint},
-    bias_constraint=${this.bias_constraint})(${this.input.name})`;
+    kernel_regularizer=${utils.toString(this.kernelRegularizer)},
+    bias_regularizer=${utils.toString(this.biasRegularizer)}, 
+    activity_regularizer=${utils.toString(this.activityRegularizer)},
+    kernel_constraint=${utils.toString(this.kernelConstraint)},
+    bias_constraint=${utils.toString(this.biasConstraint)})(${this.input.name})`;
 
     graph.writer.emitFunctionCall(lines);
     graph.writer.emitNewline();
+  }
+
+  toJson(opts={}) {
+    let json = super.getWeightsJson();
+    json.filters = this.filters;
+    json.kernelSize = this.kernelSize;
+    json.strides = this.strides;
+    json.padding = this.padding;
+    json.dataFormat = this.dataFormat;
+    json.dilationRate = this.dilationRate;
+    json.type = this.constructor.name;
+    json.name = this.name;
+
+    return json;
   }
 }

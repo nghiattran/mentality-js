@@ -2,7 +2,7 @@
 
 const Layer = require('./layer');
 const Variable = require('../../variable');
-const utils = require('../../utils');
+const utils = require('../../utils/utils');
 const Pool2D = require('./pool_2d');
 
 

@@ -3,7 +3,7 @@
 const nnstats = require('nnstats');
 
 const Layer = require('./layer');
-const utils = require('../../utils');
+const utils = require('../../utils/utils');
 const Variable = require('../../variable');
 
 module.exports = class Dense extends Layer {
@@ -28,16 +28,25 @@ module.exports = class Dense extends Layer {
   build(graph, opts) {
     let lines = `${this.output.name} = keras.layers.core.Dense(units=${this.units},
     activation='${this.activation}',
-    use_bias=${this.use_bias ? 'True' : 'False'},
+    use_bias=${utils.toString(this.useBias === true)},
     kernel_initializer='glorot_uniform',
     bias_initializer='zeros',
-    kernel_regularizer=${this.kernel_regularizer},
-    bias_regularizer=${this.bias_regularizer}, 
-    activity_regularizer=${this.activity_regularizer},
-    kernel_constraint=${this.kernel_constraint},
-    bias_constraint=${this.bias_constraint})(${this.input.name})`;
+    kernel_regularizer=${utils.toString(this.kernelRegularizer)},
+    bias_regularizer=${utils.toString(this.biasRegularizer)}, 
+    activity_regularizer=${utils.toString(this.activityRegularizer)},
+    kernel_constraint=${utils.toString(this.kernelConstraint)},
+    bias_constraint=${utils.toString(this.biasConstraint)})(${this.input.name})`;
 
     graph.writer.emitFunctionCall(lines);
     graph.writer.emitNewline();
+  }
+
+  toJson(opts={}) {
+    let json = super.getWeightsJson();
+    json.units = this.units;
+    json.type = this.constructor.name;
+    json.name = this.name;
+
+    return json;
   }
 }

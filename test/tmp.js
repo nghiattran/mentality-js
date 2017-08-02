@@ -51,7 +51,6 @@ class Program {
     }
 
     writer.emitLine(`return {${graphChildren.map(pyReturn).join(',')}}`);
-
   }
 }
 

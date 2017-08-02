@@ -1,6 +1,6 @@
 'use strict';
 
-const utils = require('../../utils');
+const utils = require('../../utils/utils');
 const Node = require('../../node');
 const Variable = require('../../variable');
 
@@ -19,29 +19,47 @@ module.exports = class Layer extends Node {
   
   addWeights(args) {
     const {
-      name,
-      activation='relu',
-      use_bias=true,
-      kernel_regularizer='None',
-      bias_regularizer='None',
-      activity_regularizer='None',
-      kernel_constraint='None',
-      bias_constraint='None'
+      useBias=true,
+      activation,
+      kernelInitializer,
+      biasInitializer,
+      kernelRegularizer,
+      biasRegularizer,
+      activityRegularizer,
+      kernelConstraint,
+      biasConstraint,
     } = args;
 
+    this.kernelInitializer = kernelInitializer;
+    this.biasInitializer = biasInitializer;
+    this.useBias = useBias;
     this.activation = activation;
-    this.kernel_regularizer = kernel_regularizer;
-    this.bias_regularizer = bias_regularizer;
-    this.activity_regularizer = activity_regularizer;
-    this.kernel_constraint = kernel_constraint;
-    this.bias_constraint = bias_constraint;
+    this.kernelRegularizer = kernelRegularizer;
+    this.biasRegularizer = biasRegularizer;
+    this.activityRegularizer = activityRegularizer;
+    this.kernelConstraint = kernelConstraint;
+    this.biasConstraint = biasConstraint;
+  }
+
+  getWeightsJson() {
+    return {
+      biasInitializer: this.biasInitializer,
+      biasInitializer: this.biasInitializer,
+      useBias: this.useBias,
+      activation: this.activation,
+      kernelRegularizer: this.kernelRegularizer,
+      biasRegularizer: this.biasRegularizer,
+      activityRegularizer: this.activityRegularizer,
+      kernelConstraint: this.kernelConstraint,
+      biasConstraint: this.biasConstraint
+    }
   }
 
   computeOutputShape() {
     throw Error('Unimplementdd.');
   }
 
-  toJson(opts) {
+  toJson(opts={}) {
     throw Error('Unimplementdd');
   }
 }

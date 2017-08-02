@@ -2,7 +2,7 @@
 
 const Layer = require('./layer');
 const Variable = require('../../variable');
-const utils = require('../../utils');
+const utils = require('../../utils/utils');
 
 module.exports = class Pool2D extends Layer {
   constructor(args={}, input) {

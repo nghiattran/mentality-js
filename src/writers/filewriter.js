@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const sprintf = require('sprintf-js').sprintf;
-const utils = require('../utils');
+const utils = require('../utils/utils');
 
 module.exports = class FileWriter {
   constructor(filename=path.join('archs', 'architect.py'), args={}) {

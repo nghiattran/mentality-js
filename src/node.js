@@ -1,6 +1,6 @@
 'use strict';
 
-const utils = require('./utils')
+const utils = require('./utils/utils')
 
 let names = new Set();
 
@@ -26,7 +26,7 @@ module.exports = class Node {
   }
 
   build() {
-    throw Error('build function must be implemented');
+    throw Error('Not implemented');
   }
 
   addNodes(nodes) {
@@ -35,5 +35,9 @@ module.exports = class Node {
 
   addNode(node) {
     this.children.push(node);
+  }
+
+  toJson() {
+    throw Error('Not implemented.')
   }
 }

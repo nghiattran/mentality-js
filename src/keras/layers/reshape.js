@@ -2,7 +2,7 @@
 
 const Layer = require('./layer');
 const Variable = require('../../variable');
-const utils = require('../../utils');
+const utils = require('../../utils/utils');
 
 module.exports = class Reshape extends Layer {
   constructor(args={}, input) {
@@ -40,5 +40,14 @@ module.exports = class Reshape extends Layer {
 
     graph.writer.emitLine(line);
     graph.writer.emitNewline();
+  }
+
+  toJson(opts={}) {
+    let json = {
+      type: this.constructor.name,
+      name: this.name,
+      targetShape: this.targetShape
+    }
+    return json;
   }
 }

@@ -1,25 +1,30 @@
 'use strict';
 
-const fs = require('fs');
-
-const utils = require('../utils');
+const utils = require('../utils/utils');
 const FileWriter = require('../writers/filewriter');
 const Graph = require('../graph');
 
 module.exports = class TFGraph extends Graph {
-  constructor(name=utils.getName('tfgraph')) {
+  constructor(name=utils.getName('tfgraph'), opts={}) {
     super(name);
+    
+    this.nameScope = opts.nameScope;
   }
 
   build(graph, opts) {
-    const {nameScope} = opts;
-    if (nameScope) {
-      graph.writer.emitLine(`with tf.name_scope('${nameScope}'):`);
+    if (this.nameScope) {
+      graph.writer.emitLine(`with tf.name_scope('${this.nameScope}'):`);
       graph.writer.incIndent();
     }
   }
 
   postCompile(graph, opts) {
     graph.writer.decIndent();
+  }
+
+  toJson(opts={}) {
+    let json = super.toJson(opts);
+    json.nameScope = this.nameScope;
+    return json;
   }
 }

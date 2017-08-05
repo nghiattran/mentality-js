@@ -2,44 +2,63 @@ const utils = require('./utils/utils');
 
 const names = new Set();
 
-module.exports = class Node {
+/**
+ * Sequential graph is a linear stack of layers.
+ * @memberof mentality
+ */
+class Node {
+  /**
+   * Constructor.
+   * @param  {string} [name=utils.getName(this.getType())] Name of the Node.
+   * @throws {Error} If Node's name has been used.
+   */
   constructor(name = utils.getName(this.getType())) {
-    if (names.has(name)) throw Error(`This name has bean used: ${name}`);
+    if (names.has(name)) throw new Error(`This name has bean used: ${name}`);
 
     names.add(name);
 
-    this.name = name;
+    /**
+     * Link to other nodes.
+     * @type {Node[]}
+     */
     this.to = [];
-    this.children = [];
+
+    /**
+     * Get name of the Node.
+     * @return {string} Node's name.
+     */
+    this.getName = () => name;
+  }
+
+  build() {
+    throw new Error('Not implemented');
   }
 
   link(node) {
-    if (!(node instanceof Node)) throw Error('Argument must be an instance of Node.');
+    if (!(node instanceof Node)) throw new Error('Argument must be an instance of Node.');
 
     this.to.push(node);
   }
 
-  compile(writer, opts = {}) {
-    utils.compile(this, writer, opts);
+  /**
+   * Export node as JSON.
+   * @param  {Object} [opts={}] Options.
+   * @return {Object}           Node's properties.
+   */
+  toJson(opts = {}) {
+    return {
+      name: this.getName(),
+      type: this.getType(),
+    };
   }
 
-  build() {
-    throw Error('Not implemented');
-  }
-
-  addNodes(nodes) {
-    this.children = this.children.concat(nodes);
-  }
-
-  addNode(node) {
-    this.children.push(node);
-  }
-
-  toJson() {
-    throw Error('Not implemented.');
-  }
-
+  /**
+   * Get type of Node.
+   * @return {string} Node's type.
+   */
   getType() {
     return this.constructor.name;
   }
-};
+}
+
+module.exports = Node;

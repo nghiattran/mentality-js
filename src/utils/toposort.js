@@ -31,9 +31,9 @@ function toposort(nodes, edges) {
   function visit(node, i, predecessors) {
     if(predecessors.indexOf(node) >= 0) {
       let stack = predecessors.map((e) => {
-        return e.name;
+        return e.getName();
       });
-      stack.push(node.name);
+      stack.push(node.getName());
 
       let e = new Error('Cyclic dependency: ' + stack.join(' -> '))
       e.predecessors = predecessors;
@@ -42,7 +42,7 @@ function toposort(nodes, edges) {
     }
 
     if (!~nodes.indexOf(node)) {
-      throw new Error('Found unknown node. Make sure to provided all involved nodes. Unknown node: '+ node.name)
+      throw new Error('Found unknown node. Make sure to provided all involved nodes. Unknown node: '+ node.getName())
     }
 
     if (visited[i]) return;

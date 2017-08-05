@@ -1,67 +1,68 @@
 const Node = require('../../node');
-const Variable = require('../../variable');
 
-module.exports = class Layer extends Node {
+/**
+ * Base class of all layers.
+ * @extends Node
+ * @memberof mentality.keras.layers
+ */
+class Layer extends Node {
+  /**
+   * Constructor.
+   * @param  {String} options.name Name of layer.
+   * @return {Layer}
+   */
   constructor({ name }) {
     super(name);
+
+    /**
+     * The layer's input.
+     */
+    this.input = undefined;
   }
 
+  /**
+   * Set a layer as an input of this layer.
+   * @param {Layer}   Input Input layer.
+   * @return {Layer}  The object itself.
+   */
   setInput(input) {
-    if (!input || !(input instanceof Variable)) {
-      return;
+    if (!input) {
+      return this;
+    }
+
+    if (this.input) {
+      throw new Error('Input has been set already.');
     }
 
     this.input = input;
-
-    this.output = new Variable(`${this.name}_h`, this.computeOutputShape());
-
-    this.link(this.output);
     input.link(this);
+
+    return this;
   }
 
-  addWeights(args) {
-    const {
-      useBias = true,
-      activation,
-      kernelInitializer,
-      biasInitializer,
-      kernelRegularizer,
-      biasRegularizer,
-      activityRegularizer,
-      kernelConstraint,
-      biasConstraint,
-    } = args;
-
-    this.kernelInitializer = kernelInitializer;
-    this.biasInitializer = biasInitializer;
-    this.useBias = useBias;
-    this.activation = activation;
-    this.kernelRegularizer = kernelRegularizer;
-    this.biasRegularizer = biasRegularizer;
-    this.activityRegularizer = activityRegularizer;
-    this.kernelConstraint = kernelConstraint;
-    this.biasConstraint = biasConstraint;
-  }
-
-  getWeightsJson() {
-    return {
-      kernelInitializer: this.kernelInitializer,
-      biasInitializer: this.biasInitializer,
-      useBias: this.useBias,
-      activation: this.activation,
-      kernelRegularizer: this.kernelRegularizer,
-      biasRegularizer: this.biasRegularizer,
-      activityRegularizer: this.activityRegularizer,
-      kernelConstraint: this.kernelConstraint,
-      biasConstraint: this.biasConstraint,
-    };
-  }
-
+  /**
+   * Interface function for computing shape of output tensor.
+   * @abstract
+   */
   computeOutputShape() {
-    throw Error('Unimplementdd.');
+    throw new Error('Unimplemented.');
   }
 
-  toJson(opts = {}) {
-    throw Error('Unimplementdd');
+  /**
+   * Interface function for counting number of neurons in layer.
+   * @abstract
+   */
+  countNeurons() {
+    throw new Error('Unimplemented.');
   }
-};
+
+  /**
+   * Interface function for counting weights in layer.
+   * @abstract
+   */
+  countWeights() {
+    throw new Error('Unimplemented.');
+  }
+}
+
+module.exports = Layer;

@@ -1,49 +1,92 @@
-function isString(str) {
-  return typeof str === 'string' || str instanceof String;
-}
-
-function isNumber(value) {
-  return typeof value === 'number';
-}
-
-function isFloat(value) {
-  return isNumber(value) && isFinite(value);
-}
-
-function isInteger(value) {
-  return isFloat(value) && Math.floor(value) === value;
-}
-
-function isDigit(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n) && n.length === 1;
-}
-
-function isLetter(char) {
-  return isString(char) && /^[a-zA-Z]/.test(char) && char.length === 1;
-}
-
-function isLetterOrDigit(char) {
-  return isDigit(char) || isLetter(char);
-}
-
-function isArray(val) {
-  return val && val.constructor === Array;
-}
-
-function isObject(val) {
-  return val && val instanceof Object;
-}
+/**
+ * This module contains functions used to check variable type.
+ * @module typeUtils
+ * @memberof mentality
+ */
 
 module.exports = {
-  isNumber,
-  isInteger,
-  isDigit,
-  isLetter,
-  isLetterOrDigit,
-  isFloat,
-  isFinite,
-  isNaN,
-  isString,
-  isArray,
-  isObject,
+  /**
+   * Check if a value is a string.
+   * @param  {Any}      value Value to be checked.
+   * @return {Boolean}        Returns true if a value is a string, false otherwise.
+   */
+  isString(value) {
+    return typeof value === 'string' || value instanceof String;
+  },
+
+  /**
+   * Check if a value is a number.
+   * @param  {Any}      value Value to be checked.
+   * @return {Boolean}        Returns true if a value is a number, false otherwise.
+   */
+  isNumber(value) {
+    return typeof value === 'number';
+  },
+
+  /**
+   * Check if a value is a float.
+   * @param  {Any}      value Value to be checked.
+   * @return {Boolean}        Returns true if a value is a float, false otherwise.
+   */
+  isFloat(value) {
+    return this.isNumber(value) && isFinite(value);
+  },
+
+  /**
+   * Check if a value is an integer.
+   * @param  {Any}      value Value to be checked.
+   * @return {Boolean}        Returns true if a value is an integer, false otherwise.
+   */
+  isInteger(value) {
+    return this.isFloat(value) && Math.floor(value) === value;
+  },
+
+  /**
+   * Check if a value is a digit.
+   * @param  {Any}      value Value to be checked.
+   * @return {Boolean}        Returns true if a value is a digit, false otherwise.
+   */
+  isDigit(value) {
+    return !isNaN(parseFloat(value)) &&
+            this.isFinite(value) &&
+            value.length === 1;
+  },
+
+  /**
+   * Check if a value is a letter.
+   * @param  {Any}      value Value to be checked.
+   * @return {Boolean}        Returns true if a value is a letter, false otherwise.
+   */
+  isLetter(value) {
+    return this.isString(value) &&
+           /^[a-zA-Z]/.test(value) &&
+           value.length === 1;
+  },
+
+  /**
+   * Check if a value is a letter or a digit.
+   * @param  {Any}      value Value to be checked.
+   * @return {Boolean}        Returns true if a value is a letter or a digit, false otherwise.
+   */
+  isLetterOrDigit(value) {
+    return this.isDigit(value) || this.isLetter(value);
+  },
+
+  /**
+   * Check if a value is an array.
+   * @param  {Any}      value Value to be checked.
+   * @return {Boolean}        Returns true if a value is an array, false otherwise.
+   */
+  isArray(value) {
+    return Array.isArray(value);
+  },
+
+  /**
+   * Check if a value is an object.
+   * @param  {Any}      value Value to be checked.
+   * @return {Boolean}        Returns true if a value is an object, false otherwise.
+   */
+  isObject(value) {
+    return value && value instanceof Object;
+  },
 };

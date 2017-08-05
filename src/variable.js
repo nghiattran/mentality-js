@@ -8,4 +8,8 @@ module.exports = class Variable extends Node {
   }
 
   build() {}
+
+  computeOutputShape() {
+    return this.shape;
+  }
 };

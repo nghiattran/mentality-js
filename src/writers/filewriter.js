@@ -1,15 +1,38 @@
 const fs = require('fs');
-const path = require('path');
 
-const sprintf = require('sprintf-js').sprintf;
 const utils = require('../utils/utils');
+const typeUtils = require('../utils/type_utils');
 
 module.exports = class FileWriter {
-  constructor(filename = path.join('archs', 'architect.py'), args = {}) {
-    this.stream = fs.createWriteStream(filename);
+  constructor(args = {}) {
+    const {
+      filename,
+      indentation = {},
+    } = args;
+
+    if (!typeUtils.isString(filename)) {
+      throw new Error('filename must be a string.');
+    }
+
+
+    const {
+      type = 'space',
+      width = 2,
+    } = indentation;
+
+    this.indentation = {
+      width,
+      type: type === 'space' ? ' ' : '\t',
+    };
+
+    this.filename = filename;
     this.indent = 0;
     this.isNewline = true;
     this.args = args;
+  }
+
+  open() {
+    this.stream = fs.createWriteStream(this.filename);
   }
 
   incIndent() {
@@ -21,12 +44,15 @@ module.exports = class FileWriter {
   }
 
   emitNewline() {
-    this.stream.write('\n');
+    this.emit('\n');
     this.isNewline = true;
   }
 
   emitCurrentIndent() {
-    this.stream.write(sprintf(`%${this.indent * 4}s`, ''));
+    const type = this.indentation.type;
+    const width = this.indentation.width;
+    const indent = type.repeat(width).repeat(this.indent);
+    this.emit(indent);
   }
 
   emitLine(line) {
@@ -60,11 +86,15 @@ module.exports = class FileWriter {
       newLines = newLines.map(trim);
       this.emitLine(newLines.join(' '));
     } else {
-      throw Error(`Unrecognized writer mode. Got: ${mode}`);
+      throw new Error(`Unrecognized writer mode. Got: ${mode}`);
     }
   }
 
   emit(str) {
+    if (!this.stream) {
+      throw new Error('Stream not opened yet.');
+    }
+
     if (this.isNewline) {
       this.isNewline = false;
       this.emitCurrentIndent();

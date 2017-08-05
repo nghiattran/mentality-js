@@ -1,8 +1,17 @@
-const Graph = require('../graph');
+const Graph = require('../../graph');
 
-module.exports = class TFGraph extends Graph {
+/**
+ * @extends mentality.Graph
+ * @memberof mentality.keras.graphs
+ */
+class FunctionalGraph extends Graph {
   constructor(args = {}) {
+    const {
+      nodes = [],
+    } = args;
     super(args);
+
+    this.addNodes(nodes);
 
     this.nameScope = args.nameScope;
   }
@@ -23,4 +32,6 @@ module.exports = class TFGraph extends Graph {
     json.nameScope = this.nameScope;
     return json;
   }
-};
+}
+
+module.exports = FunctionalGraph;

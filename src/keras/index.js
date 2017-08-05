@@ -1,9 +1,12 @@
-const Graph = require('./tf_graph');
-const SequenceGraph = require('./tf_sequence_graph');
+const graphs = require('./graphs');
 const layers = require('./layers');
 
+
+/**
+ * @memberof mentality
+ * @namespace mentality.keras
+ */
 module.exports = {
-  Graph,
-  SequenceGraph,
+  graphs,
   layers,
 };

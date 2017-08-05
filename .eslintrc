@@ -1,7 +1,20 @@
 {
   "extends": "airbnb-base",
   "rules": {
-    "no-unused-vars": ["error", { "vars": "all", "args": "none", "ignoreRestSiblings": false }],
-    "class-methods-use-this": "off"
+    "no-unused-vars": [
+      "error", { 
+        "vars": "all", 
+        "args": "none",
+        "ignoreRestSiblings": false
+      },
+    ],
+    "class-methods-use-this": "off",
+    max-len: [
+      "error", {
+        "ignoreStrings": true,
+        "ignoreTemplateLiterals": true,
+        "ignoreComments": true,
+      }
+    ]
   }
 }

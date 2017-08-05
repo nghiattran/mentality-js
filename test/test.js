@@ -137,11 +137,7 @@ let layer6 = new KerasLayers.Conv2D({
   "padding": "valid"
 });
 
-let layer7 = new KerasLayers.Flatten({
-  "type": "flatten",
-  "activation": "relu",
-  "units": 1164
-});
+let layer7 = new KerasLayers.Flatten();
 
 let layer8 = new KerasLayers.Dense({
   "type": "dense",

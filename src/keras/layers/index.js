@@ -10,6 +10,10 @@ const Conv3D = require('./conv/conv3d');
 const AveragePool2D = require('./conv/average_pool2d');
 const MaxPool2D = require('./conv/max_pool2d');
 
+/**
+ * @memberof mentality.keras
+ * @namespace mentality.keras.layers
+ */
 module.exports = {
   Layer,
   Flatten,

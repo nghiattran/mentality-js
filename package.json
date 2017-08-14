@@ -13,7 +13,7 @@
   },
   "files": [
     "index.js",
-    "lib"
+    "src"
   ],
   "repository": "nghiattran/mentality-js",
   "author": {

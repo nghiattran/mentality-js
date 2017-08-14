@@ -1,0 +1,219 @@
+{
+    "name": "graph",
+    "type": "SequentialGraph",
+    "children": [
+        {
+            "targetShape": [
+                -1,
+                224,
+                224,
+                3
+            ],
+            "name": "Reshape",
+            "type": "Reshape"
+        },
+        {
+            "name": "Input",
+            "type": "Input"
+        },
+        {
+            "filters": 64,
+            "kernelSize": [
+                3,
+                3
+            ],
+            "activation": "relu"
+        },
+        {
+            "filters": 64,
+            "kernelSize": [
+                3,
+                3
+            ],
+            "activation": "relu"
+        },
+        {
+            "poolSize": [
+                2,
+                2
+            ],
+            "name": "pool1",
+            "type": "MaxPool2D"
+        },
+        {
+            "filters": 128,
+            "kernelSize": [
+                3,
+                3
+            ],
+            "activation": "relu"
+        },
+        {
+            "filters": 128,
+            "kernelSize": [
+                3,
+                3
+            ],
+            "activation": "relu"
+        },
+        {
+            "poolSize": [
+                2,
+                2
+            ],
+            "name": "pool2",
+            "type": "MaxPool2D"
+        },
+        {
+            "filters": 256,
+            "kernelSize": [
+                3,
+                3
+            ],
+            "activation": "relu"
+        },
+        {
+            "filters": 256,
+            "kernelSize": [
+                3,
+                3
+            ],
+            "activation": "relu",
+            "strides": [
+                1,
+                1
+            ]
+        },
+        {
+            "filters": 256,
+            "kernelSize": [
+                3,
+                3
+            ],
+            "activation": "relu",
+            "strides": [
+                1,
+                1
+            ]
+        },
+        {
+            "poolSize": [
+                2,
+                2
+            ],
+            "name": "pool3",
+            "type": "MaxPool2D"
+        },
+        {
+            "filters": 512,
+            "kernelSize": [
+                3,
+                3
+            ],
+            "activation": "relu",
+            "strides": [
+                1,
+                1
+            ]
+        },
+        {
+            "filters": 512,
+            "kernelSize": [
+                3,
+                3
+            ],
+            "activation": "relu",
+            "strides": [
+                1,
+                1
+            ]
+        },
+        {
+            "filters": 512,
+            "kernelSize": [
+                3,
+                3
+            ],
+            "activation": "relu",
+            "strides": [
+                1,
+                1
+            ]
+        },
+        {
+            "poolSize": [
+                2,
+                2
+            ],
+            "name": "pool4",
+            "type": "MaxPool2D"
+        },
+        {
+            "filters": 512,
+            "kernelSize": [
+                3,
+                3
+            ],
+            "activation": "relu",
+            "strides": [
+                1,
+                1
+            ]
+        },
+        {
+            "filters": 512,
+            "kernelSize": [
+                3,
+                3
+            ],
+            "activation": "relu",
+            "strides": [
+                1,
+                1
+            ]
+        },
+        {
+            "filters": 512,
+            "kernelSize": [
+                3,
+                3
+            ],
+            "activation": "relu",
+            "strides": [
+                1,
+                1
+            ]
+        },
+        {
+            "poolSize": [
+                2,
+                2
+            ],
+            "name": "pool5",
+            "type": "MaxPool2D"
+        },
+        {
+            "name": "Flatten",
+            "type": "Flatten"
+        },
+        {
+            "units": 4056,
+            "activation": "relu",
+            "name": "fc1",
+            "type": "Dense"
+        },
+        {
+            "units": 4056,
+            "activation": "relu",
+            "name": "fc2",
+            "type": "Dense"
+        },
+        {
+            "units": 21,
+            "activation": "softmax",
+            "name": "predictions",
+            "type": "Dense"
+        }
+    ],
+    "nameScope": "Network"
+}

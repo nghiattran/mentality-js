@@ -1,0 +1,160 @@
+{
+    "name": "graph",
+    "children": [
+        {
+            "type": "Reshape",
+            "name": "reshape",
+            "targetShape": [
+                -1,
+                66,
+                200,
+                3
+            ],
+            "children": []
+        },
+        {
+            "type": "Input",
+            "name": "Input",
+            "children": []
+        },
+        {
+            "useBias": true,
+            "activation": "relu",
+            "filters": 24,
+            "kernelSize": [
+                5,
+                5
+            ],
+            "strides": [
+                2,
+                2
+            ],
+            "padding": "valid",
+            "dataFormat": "channels_last",
+            "dilationRate": [
+                1,
+                1
+            ],
+            "type": "Conv2D",
+            "name": "Conv2D",
+            "children": []
+        },
+        {
+            "useBias": true,
+            "activation": "relu",
+            "filters": 36,
+            "kernelSize": [
+                5,
+                5
+            ],
+            "strides": [
+                2,
+                2
+            ],
+            "padding": "valid",
+            "dataFormat": "channels_last",
+            "dilationRate": [
+                1,
+                1
+            ],
+            "type": "Conv2D",
+            "name": "Conv2D_1",
+            "children": []
+        },
+        {
+            "poolSize": [
+                4,
+                4
+            ],
+            "strides": [
+                2,
+                2
+            ],
+            "padding": "valid",
+            "dataFormat": "channels_last",
+            "children": []
+        },
+        {
+            "useBias": true,
+            "activation": "relu",
+            "filters": 64,
+            "kernelSize": [
+                3,
+                3
+            ],
+            "strides": [
+                1,
+                1
+            ],
+            "padding": "valid",
+            "dataFormat": "channels_last",
+            "dilationRate": [
+                1,
+                1
+            ],
+            "type": "Conv2D",
+            "name": "Conv2D_2",
+            "children": []
+        },
+        {
+            "useBias": true,
+            "activation": "relu",
+            "filters": 64,
+            "kernelSize": [
+                3,
+                3
+            ],
+            "strides": [
+                1,
+                1
+            ],
+            "padding": "valid",
+            "dataFormat": "channels_last",
+            "dilationRate": [
+                1,
+                1
+            ],
+            "type": "Conv2D",
+            "name": "Conv2D_3",
+            "children": []
+        },
+        {
+            "type": "Flatten",
+            "name": "Flatten",
+            "children": []
+        },
+        {
+            "useBias": true,
+            "activation": "relu",
+            "units": 1164,
+            "type": "Dense",
+            "name": "Dense",
+            "children": []
+        },
+        {
+            "useBias": true,
+            "activation": "relu",
+            "units": 100,
+            "type": "Dense",
+            "name": "Dense_1",
+            "children": []
+        },
+        {
+            "useBias": true,
+            "activation": "relu",
+            "units": 10,
+            "type": "Dense",
+            "name": "Dense_2",
+            "children": []
+        },
+        {
+            "useBias": true,
+            "activation": "tanh",
+            "units": 1,
+            "type": "Dense",
+            "name": "output",
+            "children": []
+        }
+    ],
+    "nameScope": "Network"
+}

@@ -10,25 +10,31 @@
   }],
   "layers": [{
     "name": "layer1",
-    "type": "conv",
-    "activation": "relu",
-    "args": {
-      "filter": [3, 3, 64],
-      "strides": [1, 1],
-      "padding": [1, 1]
-    },
+    "type": "Conv",
+    "activation": "Relu",
+    "use_bias": true,
+    "kernel_initializer": null,
+    "bias_initializer": null,
+    "kernel_regularizer": null,
+    "bias_regularizer": null,
+    "filter": [3, 3, 3, 64],
+    "strides": [1, 1, 1, 1],
+    "padding": "SAME",
     "to": ["layer2"]
   }, {
-    "type": "conv",
+    "type": "Conv",
     "name": "layer2",
-    "activation": "relu",
-    "args": {
-      "filter": [2, 2],
-      "strides": [2, 2],
-      "padding": [0, 0]
-    }
+    "activation": "Relu",
+    "use_bias": true,
+    "kernel_initializer": null,
+    "bias_initializer": null,
+    "kernel_regularizer": null,
+    "bias_regularizer": null,
+    "filter": [1, 2, 2, 1],
+    "strides": [1, 1, 1, 1],
+    "padding": "SAME"
   }],
   "configure": {
-
+    "framework": "tensoflow"
   }
 }

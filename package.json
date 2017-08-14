@@ -11,7 +11,8 @@
     "node": ">=0.10.0"
   },
   "files": [
-    "index.js"
+    "index.js",
+    "lib"
   ],
   "repository": "nghiattran/mentality-js",
   "author": {

@@ -12,6 +12,7 @@
     "node": ">=0.10.0"
   },
   "files": [
+    ".mentality-src.json",
     "index.js",
     "src"
   ],

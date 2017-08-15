@@ -23,31 +23,31 @@ const Weights = require('../../weights');
 @type     checkbox
 @description      Boolean, whether the layer uses a bias vector.
 
-@property     kernel_initializer
+@property     kernelInitializer
 @type         text
 @description  Initializer for the `kernel` weights matrix (see ![initializers](https://keras.io/initializers/)).
 
-@property     bias_initializer
+@property     biasInitializer
 @type         text
 @description  Initializer for the bias vector (see ![initializers](https://keras.io/initializers/)).
 
-@property     kernel_regularizer
+@property     kernelRegularizer
 @type         text
 @description  Regularizer function applied to the `kernel` weights matrix (see ![regularizer](https://keras.io/regularizers/)).
 
-@property     bias_regularizer
+@property     biasRegularizer
 @type         text
 @description  Regularizer function applied to the bias vector (see ![regularizer](https://keras.io/regularizers/)).
 
-@property     activity_regularizer
+@property     activityRegularizer
 @type         text
 @description  Regularizer function applied to the output of the layer (its "activation"). (see ![regularizer](https://keras.io/regularizers/)).
 
-@property     kernel_constraint
+@property     kernelConstraint
 @type         text
 @description  Constraint function applied to the kernel weights matrix (see ![constraints](https://keras.io/constraints/)).
 
-@property     bias_constraint
+@property     biasConstraint
 @type         text
 @description  Constraint function applied to the bias vector  (see ![constraints](https://keras.io/constraints/)).
  */

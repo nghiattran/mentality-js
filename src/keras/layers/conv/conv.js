@@ -66,6 +66,10 @@ class ConvParameter {
         .concat(weightParams)
         .join(',\n');
     }
+
+    this.getDefault = () => {
+      return lodashDefaults(optional.getDefaultConfig(), weight.getDefaultConfig());
+    }
   }
 }
 
@@ -94,7 +98,7 @@ class Conv extends Layer {
   computeOutputShape() {
     const inputShape = this.input.computeOutputShape();
     const parameters = this.parameters.get({ verbose: true });
-    
+
     const {
       padding,
       dataFormat,

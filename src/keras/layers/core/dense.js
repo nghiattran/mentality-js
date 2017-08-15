@@ -62,9 +62,7 @@ class DenseParameter {
     };
     let optional = new Weights(args);
 
-    this.get = (opts) => { 
-      lodashDefaults(required, optional.getConfig(opts))
-    }
+    this.get = opts => lodashDefaults(required, optional.getConfig(opts));
 
     this.getByKey = (key) => {
       if (key in required) {
@@ -88,6 +86,10 @@ class DenseParameter {
       ];
       const weightParams = optional.toParams(opts);
       return requiredParams.concat(weightParams).join(',\n');
+    }
+
+    this.getDefault = () => {
+      return optional.getDefaultConfig();
     }
   }
 }

@@ -6,6 +6,7 @@ const Weights = require('../../weights');
 /* 
 @node Dense
 @description Dense implements the operation: `output = activation(dot(input, kernel) + bias)`` where activation is the element-wise activation function passed as the activation argument, kernel is a weights matrix created by the layer, and bias is a bias vector created by the layer (only applicable if `use_bias` is True).
+@path keras.layers.Dense
 
 @property    units
 @type     number

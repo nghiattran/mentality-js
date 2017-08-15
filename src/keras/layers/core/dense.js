@@ -5,7 +5,7 @@ const Weights = require('../../weights');
 
 /* 
 @node Dense
-@description Dense implements the operation: output = activation(dot(input, kernel) + bias) where activation is the element-wise activation function passed as the activation argument, kernel is a weights matrix created by the layer, and bias is a bias vector created by the layer (only applicable if use_bias is True).
+@description Dense implements the operation: `output = activation(dot(input, kernel) + bias)`` where activation is the element-wise activation function passed as the activation argument, kernel is a weights matrix created by the layer, and bias is a bias vector created by the layer (only applicable if `use_bias` is True).
 
 @property    units
 @type     number
@@ -16,9 +16,80 @@ const Weights = require('../../weights');
 
 @property activation
 @type     text
+@description     Activation function to use (see activations). If you don't specify anything, no activation is applied (ie. "linear" activation: a(x) = x).
 
-@description     Activation function to use (see activations). If you don't specify anything, no activation is applied (ie. "linear" activation: a(x) = x)
+@property use_bias
+@type     checkbox
+@description      Boolean, whether the layer uses a bias vector.
+
+@property     kernel_initializer
+@type         text
+@description  Initializer for the `kernel` weights matrix (see ![initializers](https://keras.io/initializers/)).
+
+@property     bias_initializer
+@type         text
+@description  Initializer for the bias vector (see ![initializers](https://keras.io/initializers/)).
+
+@property     kernel_regularizer
+@type         text
+@description  Regularizer function applied to the `kernel` weights matrix (see ![regularizer](https://keras.io/regularizers/)).
+
+@property     bias_regularizer
+@type         text
+@description  Regularizer function applied to the bias vector (see ![regularizer](https://keras.io/regularizers/)).
+
+@property     activity_regularizer
+@type         text
+@description  Regularizer function applied to the output of the layer (its "activation"). (see ![regularizer](https://keras.io/regularizers/)).
+
+@property     kernel_constraint
+@type         text
+@description  Constraint function applied to the kernel weights matrix (see ![constraints](https://keras.io/constraints/)).
+
+@property     bias_constraint
+@type         text
+@description  Constraint function applied to the bias vector  (see ![constraints](https://keras.io/constraints/)).
  */
+
+/**
+ * Utility class used to store all parameters for Dense layer. 
+ */
+class DenseParameter {
+  constructor(args) {
+    let required = {
+      units: args.units
+    };
+    let optional = new Weights(args);
+
+    this.get = (opts) => { 
+      lodashDefaults(required, optional.getConfig(opts))
+    }
+
+    this.getByKey = (key) => {
+      if (key in required) {
+        return required[key]
+      } else {
+        return optional.getConfigByKey(key);
+      }
+    }
+
+    this.setByKey = (key, value) => {
+      if (key in required) {
+        required[key] = value;
+      } else {
+        optional.setConfigByKey(key, value);
+      }
+    }
+
+    this.toParams = (opts) => {
+      const requiredParams = [
+        `units=${required.units}`,
+      ];
+      const weightParams = optional.toParams(opts);
+      return requiredParams.concat(weightParams).join(',\n');
+    }
+  }
+}
 
 /**
  * Regular fully-connected layer.
@@ -34,9 +105,7 @@ class Dense extends Layer {
    */
   constructor(args = {}, input) {
     super(args, input);
-
-    this.weightConfig = new Weights(args);
-    this.units = args.units;
+    this.parameters = new DenseParameter(args);
     this.setInput(input);
   }
 
@@ -51,7 +120,8 @@ class Dense extends Layer {
     if (inputShape.length > 2) throw new Error(`Invalid shape. Expected shape length 2. Got ${inputShape.length}.`);
 
     const outputShape = Array.from(inputShape);
-    outputShape[outputShape.length - 1] = this.units;
+    outputShape[outputShape.length - 1] = this.parameters.getByKey('units');
+
     return outputShape;
   }
 
@@ -61,11 +131,7 @@ class Dense extends Layer {
    * @param  {Object} opts   Options.
    */
   build(writer, opts = {}) {
-    const requiredParams = [
-      `units=${this.units}`,
-    ];
-    const weightParams = this.weightConfig.toParams(opts);
-    const params = requiredParams.concat(weightParams).join(',\n');
+    const params = this.parameters.toParams();
 
     const lines = `${this.getName()} = mentality.keras.layers.Dense(${params})(${this.input.getName()})`;
 
@@ -79,9 +145,7 @@ class Dense extends Layer {
    * @return {Object}       Layer properties as JSON.
    */
   toJson(opts = {}) {
-    return lodashDefaults({
-      units: this.units,
-    }, this.weightConfig.getConfig(opts), super.toJson(opts));
+    return lodashDefaults(this.parameters.get(opts), super.toJson(opts));
   }
 
   /**
@@ -89,7 +153,7 @@ class Dense extends Layer {
    * @return {Number}   Number of neurons.
    */
   countNeurons() {
-    return this.units;
+    return this.parameters.getByKey('units');
   }
 
   /**
@@ -97,7 +161,7 @@ class Dense extends Layer {
    * @return {Number}   Number of neurons.
    */
   countWeights() {
-    return this.input.computeOutputShape()[1] * this.units;
+    return this.input.computeOutputShape()[1] * this.parameters.getByKey('units');
   }
 }
 

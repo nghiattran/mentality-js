@@ -7,6 +7,7 @@ const typeUtils = require('../../../utils/type_utils');
 const Weights = require('../../weights');
 const Config = require('../../config');
 
+
 class ConvOptionalConfig extends Config {
   constructor(config = {}) {
     super({
@@ -15,6 +16,56 @@ class ConvOptionalConfig extends Config {
       dataFormat: 'channels_last',
       dilationRate: 1,
     }, config);
+  }
+}
+
+/**
+ * Utility class used to store all parameters for Conv layer. 
+ */
+class ConvParameter {
+  constructor(args) {
+    const required = {
+      rank: args.rank,
+      filters: args.filters,
+      kernelSize: args.kernelSize,
+    };
+
+    const optional = new ConvOptionalConfig(args);
+    const weight = new Weights(args);
+
+    this.get = opts => lodashDefaults(required, optional.getConfig(opts), weight.getConfig(opts));
+    
+
+    this.getByKey = (key) => {
+      if (key in required) {
+        return required[key]
+      } else if (key in optional) {
+        return optional.getConfigByKey(key);
+      } else {
+        return weight.getConfigByKey(key);
+      }
+    }
+
+    this.setByKey = (key, value) => {
+      if (key in required) {
+        required[key] = value;
+      } else if (key in optional) {
+        optional.setConfigByKey(key, value);
+      } else {
+        weight.setConfigByKey(key, value);
+      }
+    }
+
+    this.toParams = (opts) => {
+      const keys = Object.keys(required);
+      const requiredParams = keys.map(key => utils.toString(required[key]));
+      const weightParams = weight.toParams(opts);
+      const optionalParams = optional.toParams(opts);
+
+      return requiredParams.concat(weightParams)
+        .concat(weightParams)
+        .join(',\n');
+    }
   }
 }
 
@@ -32,19 +83,7 @@ class Conv extends Layer {
    */
   constructor(args = {}, input) {
     super(args);
-
-    const {
-      filters,
-      kernelSize,
-      rank,
-    } = args;
-
-    this.rank = rank;
-    this.filters = filters;
-    this.kernelSize = kernelSize;
-    this.optionalConfig = new ConvOptionalConfig(args);
-    this.weightConfig = new Weights(args);
-
+    this.parameters = new ConvParameter(args);
     this.setInput(input);
   }
 
@@ -54,17 +93,21 @@ class Conv extends Layer {
    */
   computeOutputShape() {
     const inputShape = this.input.computeOutputShape();
-    const config = this.optionalConfig.getConfig({ verbose: true });
+    const parameters = this.parameters.get({ verbose: true });
+    
     const {
       padding,
       dataFormat,
       dilationRate,
-    } = config;
-    let { strides } = config;
+      rank,
+      filters,
+      kernelSize,
+    } = parameters;
+    let {strides} = parameters;
 
     if (typeUtils.isNumber(strides)) {
       const value = strides;
-      strides = lodashFill(Array(this.rank), value);
+      strides = lodashFill(Array(rank), value);
     }
 
     if (dataFormat === 'channels_last') {
@@ -75,14 +118,14 @@ class Conv extends Layer {
         const newDim = utils.computeConvOutputLength({
           padding,
           inputLength: space[i],
-          filterSize: this.kernelSize[i],
+          filterSize: kernelSize[i],
           stride: strides[i],
           dilation: dilationRate[i],
         });
 
         newSpace.push(newDim);
       }
-      return [inputShape[0]].concat(newSpace).concat(this.filters);
+      return [inputShape[0]].concat(newSpace).concat(filters);
     } else if (dataFormat === 'channels_first') {
       const space = inputShape.slice(2);
       const newSpace = [];
@@ -91,7 +134,7 @@ class Conv extends Layer {
         const newDim = utils.computeConvOutputLength({
           padding,
           inputLength: space[i],
-          filterSize: this.kernelSize[i],
+          filterSize: kernelSize[i],
           stride: strides[i],
           dilation: dilationRate[i],
         });
@@ -99,7 +142,7 @@ class Conv extends Layer {
         newSpace.push(newDim);
       }
 
-      return [inputShape[0]].concat(this.filters).concat(newSpace);
+      return [inputShape[0]].concat(filters).concat(newSpace);
     }
 
     throw new Error(`Unrecognized data format. Got ${dataFormat}.`);
@@ -111,15 +154,22 @@ class Conv extends Layer {
    * @param  {Object} opts   Options.
    */
   build(writer, opts = {}) {
-    const requiredParams = [
-      `filters=${this.filters}`,
-      `kernel_size=${utils.toString(this.kernelSize)}`,
-    ];
-    const weightParams = this.weightConfig.toParams(opts);
-    const optionalParams = this.optionalConfig.toParams(opts);
-    const params = requiredParams.concat(weightParams).concat(optionalParams).join(',\n');
+    const {
+      padding,
+      dataFormat,
+      dilationRate,
+      strides,
+      rank,
+      filters,
+      kernelSize,
+    } = this.parameters.get({ verbose: true });
 
-    const lines = `${this.getName()} = mentality.keras.layers.${this.getType()}(${params})(${this.input.getName()})`;
+    const requiredParams = [
+      `filters=${filters}`,
+      `kernel_size=${utils.toString(kernelSize)}`,
+    ];
+
+    const lines = `${this.getName()} = mentality.keras.layers.${this.getType()}(${this.parameters.toParams(opts)})(${this.input.getName()})`;
 
     writer.emitFunctionCall(lines);
     writer.emitNewline();
@@ -131,15 +181,7 @@ class Conv extends Layer {
    * @return {Object}       Layer properties as JSON.
    */
   toJson(opts = {}) {
-    const weightJson = this.weightConfig.getConfig(opts);
-    const optionalJson = this.optionalConfig.getConfig(opts);
-
-    const convJson = {
-      filters: this.filters,
-      kernelSize: this.kernelSize,
-    };
-
-    return lodashDefaults(convJson, weightJson, optionalJson);
+    return this.parameters.get(opts);
   }
 
   /**

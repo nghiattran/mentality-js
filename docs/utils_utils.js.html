@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>utils/utils.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="mentality.Graph.html">Graph</a><ul class='methods'><li data-type='method'><a href="mentality.Graph.html#addNode">addNode</a></li><li data-type='method'><a href="mentality.Graph.html#addNodes">addNodes</a></li><li data-type='method'><a href="mentality.Graph.html#getName">getName</a></li><li data-type='method'><a href="mentality.Graph.html#getType">getType</a></li><li data-type='method'><a href="mentality.Graph.html#toJson">toJson</a></li></ul></li><li><a href="mentality.keras.Config.html">Config</a><ul class='methods'><li data-type='method'><a href="mentality.keras.Config.html#getConfig">getConfig</a></li><li data-type='method'><a href="mentality.keras.Config.html#getConfigByKey">getConfigByKey</a></li><li data-type='method'><a href="mentality.keras.Config.html#getDefaultConfig">getDefaultConfig</a></li><li data-type='method'><a href="mentality.keras.Config.html#setConfigByKey">setConfigByKey</a></li><li data-type='method'><a href="mentality.keras.Config.html#toParams">toParams</a></li></ul></li><li><a href="mentality.keras.graphs.FunctionalGraph.html">FunctionalGraph</a><ul class='methods'><li data-type='method'><a href="mentality.keras.graphs.FunctionalGraph.html#addNode">addNode</a></li><li data-type='method'><a href="mentality.keras.graphs.FunctionalGraph.html#addNodes">addNodes</a></li><li data-type='method'><a href="mentality.keras.graphs.FunctionalGraph.html#getName">getName</a></li><li data-type='method'><a href="mentality.keras.graphs.FunctionalGraph.html#getType">getType</a></li><li data-type='method'><a href="mentality.keras.graphs.FunctionalGraph.html#toJson">toJson</a></li></ul></li><li><a href="mentality.keras.graphs.SequentialGraph.html">SequentialGraph</a><ul class='methods'><li data-type='method'><a href="mentality.keras.graphs.SequentialGraph.html#addNode">addNode</a></li><li data-type='method'><a href="mentality.keras.graphs.SequentialGraph.html#addNodes">addNodes</a></li><li data-type='method'><a href="mentality.keras.graphs.SequentialGraph.html#getName">getName</a></li><li data-type='method'><a href="mentality.keras.graphs.SequentialGraph.html#getType">getType</a></li><li data-type='method'><a href="mentality.keras.graphs.SequentialGraph.html#toJson">toJson</a></li></ul></li><li><a href="mentality.keras.layers.AveragePool2D.html">AveragePool2D</a><ul class='methods'><li data-type='method'><a href="mentality.keras.layers.AveragePool2D.html#build">build</a></li><li data-type='method'><a href="mentality.keras.layers.AveragePool2D.html#computeOutputShape">computeOutputShape</a></li><li data-type='method'><a href="mentality.keras.layers.AveragePool2D.html#countNeurons">countNeurons</a></li><li data-type='method'><a href="mentality.keras.layers.AveragePool2D.html#countWeights">countWeights</a></li><li data-type='method'><a href="mentality.keras.layers.AveragePool2D.html#setInput">setInput</a></li><li data-type='method'><a href="mentality.keras.layers.AveragePool2D.html#toJson">toJson</a></li></ul></li><li><a href="mentality.keras.layers.Conv.html">Conv</a><ul class='methods'><li data-type='method'><a href="mentality.keras.layers.Conv.html#build">build</a></li><li data-type='method'><a href="mentality.keras.layers.Conv.html#computeOutputShape">computeOutputShape</a></li><li data-type='method'><a href="mentality.keras.layers.Conv.html#countNeurons">countNeurons</a></li><li data-type='method'><a href="mentality.keras.layers.Conv.html#countWeights">countWeights</a></li><li data-type='method'><a href="mentality.keras.layers.Conv.html#setInput">setInput</a></li><li data-type='method'><a href="mentality.keras.layers.Conv.html#toJson">toJson</a></li></ul></li><li><a href="mentality.keras.layers.Conv1D.html">Conv1D</a><ul class='methods'><li data-type='method'><a href="mentality.keras.layers.Conv1D.html#build">build</a></li><li data-type='method'><a href="mentality.keras.layers.Conv1D.html#computeOutputShape">computeOutputShape</a></li><li data-type='method'><a href="mentality.keras.layers.Conv1D.html#countNeurons">countNeurons</a></li><li data-type='method'><a href="mentality.keras.layers.Conv1D.html#countWeights">countWeights</a></li><li data-type='method'><a href="mentality.keras.layers.Conv1D.html#setInput">setInput</a></li><li data-type='method'><a href="mentality.keras.layers.Conv1D.html#toJson">toJson</a></li></ul></li><li><a href="mentality.keras.layers.Conv2D.html">Conv2D</a><ul class='methods'><li data-type='method'><a href="mentality.keras.layers.Conv2D.html#build">build</a></li><li data-type='method'><a href="mentality.keras.layers.Conv2D.html#computeOutputShape">computeOutputShape</a></li><li data-type='method'><a href="mentality.keras.layers.Conv2D.html#countNeurons">countNeurons</a></li><li data-type='method'><a href="mentality.keras.layers.Conv2D.html#countWeights">countWeights</a></li><li data-type='method'><a href="mentality.keras.layers.Conv2D.html#setInput">setInput</a></li><li data-type='method'><a href="mentality.keras.layers.Conv2D.html#toJson">toJson</a></li></ul></li><li><a href="mentality.keras.layers.Conv3D.html">Conv3D</a><ul class='methods'><li data-type='method'><a href="mentality.keras.layers.Conv3D.html#build">build</a></li><li data-type='method'><a href="mentality.keras.layers.Conv3D.html#computeOutputShape">computeOutputShape</a></li><li data-type='method'><a href="mentality.keras.layers.Conv3D.html#countNeurons">countNeurons</a></li><li data-type='method'><a href="mentality.keras.layers.Conv3D.html#countWeights">countWeights</a></li><li data-type='method'><a href="mentality.keras.layers.Conv3D.html#setInput">setInput</a></li><li data-type='method'><a href="mentality.keras.layers.Conv3D.html#toJson">toJson</a></li></ul></li><li><a href="mentality.keras.layers.Dense.html">Dense</a><ul class='methods'><li data-type='method'><a href="mentality.keras.layers.Dense.html#build">build</a></li><li data-type='method'><a href="mentality.keras.layers.Dense.html#computeOutputShape">computeOutputShape</a></li><li data-type='method'><a href="mentality.keras.layers.Dense.html#countNeurons">countNeurons</a></li><li data-type='method'><a href="mentality.keras.layers.Dense.html#countWeights">countWeights</a></li><li data-type='method'><a href="mentality.keras.layers.Dense.html#setInput">setInput</a></li><li data-type='method'><a href="mentality.keras.layers.Dense.html#toJson">toJson</a></li></ul></li><li><a href="mentality.keras.layers.Dropout.html">Dropout</a><ul class='methods'><li data-type='method'><a href="mentality.keras.layers.Dropout.html#build">build</a></li><li data-type='method'><a href="mentality.keras.layers.Dropout.html#computeOutputShape">computeOutputShape</a></li><li data-type='method'><a href="mentality.keras.layers.Dropout.html#countNeurons">countNeurons</a></li><li data-type='method'><a href="mentality.keras.layers.Dropout.html#countWeights">countWeights</a></li><li data-type='method'><a href="mentality.keras.layers.Dropout.html#setInput">setInput</a></li><li data-type='method'><a href="mentality.keras.layers.Dropout.html#toJson">toJson</a></li></ul></li><li><a href="mentality.keras.layers.Flatten.html">Flatten</a><ul class='methods'><li data-type='method'><a href="mentality.keras.layers.Flatten.html#build">build</a></li><li data-type='method'><a href="mentality.keras.layers.Flatten.html#computeOutputShape">computeOutputShape</a></li><li data-type='method'><a href="mentality.keras.layers.Flatten.html#countNeurons">countNeurons</a></li><li data-type='method'><a href="mentality.keras.layers.Flatten.html#countWeights">countWeights</a></li><li data-type='method'><a href="mentality.keras.layers.Flatten.html#setInput">setInput</a></li></ul></li><li><a href="mentality.keras.layers.Input.html">Input</a><ul class='methods'><li data-type='method'><a href="mentality.keras.layers.Input.html#build">build</a></li><li data-type='method'><a href="mentality.keras.layers.Input.html#computeOutputShape">computeOutputShape</a></li><li data-type='method'><a href="mentality.keras.layers.Input.html#countNeurons">countNeurons</a></li><li data-type='method'><a href="mentality.keras.layers.Input.html#countWeights">countWeights</a></li><li data-type='method'><a href="mentality.keras.layers.Input.html#setInput">setInput</a></li></ul></li><li><a href="mentality.keras.layers.Layer.html">Layer</a><ul class='methods'><li data-type='method'><a href="mentality.keras.layers.Layer.html#computeOutputShape">computeOutputShape</a></li><li data-type='method'><a href="mentality.keras.layers.Layer.html#countNeurons">countNeurons</a></li><li data-type='method'><a href="mentality.keras.layers.Layer.html#countWeights">countWeights</a></li><li data-type='method'><a href="mentality.keras.layers.Layer.html#setInput">setInput</a></li></ul></li><li><a href="mentality.keras.layers.MaxPool2D.html">MaxPool2D</a><ul class='methods'><li data-type='method'><a href="mentality.keras.layers.MaxPool2D.html#build">build</a></li><li data-type='method'><a href="mentality.keras.layers.MaxPool2D.html#computeOutputShape">computeOutputShape</a></li><li data-type='method'><a href="mentality.keras.layers.MaxPool2D.html#countNeurons">countNeurons</a></li><li data-type='method'><a href="mentality.keras.layers.MaxPool2D.html#countWeights">countWeights</a></li><li data-type='method'><a href="mentality.keras.layers.MaxPool2D.html#setInput">setInput</a></li><li data-type='method'><a href="mentality.keras.layers.MaxPool2D.html#toJson">toJson</a></li></ul></li><li><a href="mentality.keras.layers.Pool2D.html">Pool2D</a><ul class='methods'><li data-type='method'><a href="mentality.keras.layers.Pool2D.html#build">build</a></li><li data-type='method'><a href="mentality.keras.layers.Pool2D.html#computeOutputShape">computeOutputShape</a></li><li data-type='method'><a href="mentality.keras.layers.Pool2D.html#countNeurons">countNeurons</a></li><li data-type='method'><a href="mentality.keras.layers.Pool2D.html#countWeights">countWeights</a></li><li data-type='method'><a href="mentality.keras.layers.Pool2D.html#setInput">setInput</a></li><li data-type='method'><a href="mentality.keras.layers.Pool2D.html#toJson">toJson</a></li></ul></li><li><a href="mentality.keras.layers.Reshape.html">Reshape</a><ul class='methods'><li data-type='method'><a href="mentality.keras.layers.Reshape.html#build">build</a></li><li data-type='method'><a href="mentality.keras.layers.Reshape.html#computeOutputShape">computeOutputShape</a></li><li data-type='method'><a href="mentality.keras.layers.Reshape.html#countNeurons">countNeurons</a></li><li data-type='method'><a href="mentality.keras.layers.Reshape.html#countWeights">countWeights</a></li><li data-type='method'><a href="mentality.keras.layers.Reshape.html#setInput">setInput</a></li><li data-type='method'><a href="mentality.keras.layers.Reshape.html#toJson">toJson</a></li></ul></li><li><a href="mentality.Node.html">Node</a><ul class='methods'><li data-type='method'><a href="mentality.Node.html#getName">getName</a></li><li data-type='method'><a href="mentality.Node.html#getType">getType</a></li><li data-type='method'><a href="mentality.Node.html#toJson">toJson</a></li></ul></li><li><a href="mentality.programs.TensorKitProgram.html">TensorKitProgram</a></li></ul><h3>Modules</h3><ul><li><a href="mentality.module_typeUtils.html">typeUtils</a><ul class='methods'><li data-type='method'><a href="mentality.module_typeUtils.html#.isArray">isArray</a></li><li data-type='method'><a href="mentality.module_typeUtils.html#.isDigit">isDigit</a></li><li data-type='method'><a href="mentality.module_typeUtils.html#.isFloat">isFloat</a></li><li data-type='method'><a href="mentality.module_typeUtils.html#.isInteger">isInteger</a></li><li data-type='method'><a href="mentality.module_typeUtils.html#.isLetter">isLetter</a></li><li data-type='method'><a href="mentality.module_typeUtils.html#.isLetterOrDigit">isLetterOrDigit</a></li><li data-type='method'><a href="mentality.module_typeUtils.html#.isNumber">isNumber</a></li><li data-type='method'><a href="mentality.module_typeUtils.html#.isObject">isObject</a></li><li data-type='method'><a href="mentality.module_typeUtils.html#.isString">isString</a></li></ul></li><li><a href="mentality.module_utils.html">utils</a><ul class='methods'><li data-type='method'><a href="mentality.module_utils.html#.allignArguments">allignArguments</a></li><li data-type='method'><a href="mentality.module_utils.html#.computeConvOutputLength">computeConvOutputLength</a></li><li data-type='method'><a href="mentality.module_utils.html#.getName">getName</a></li><li data-type='method'><a href="mentality.module_utils.html#.toString">toString</a></li></ul></li></ul><h3>Namespaces</h3><ul><li><a href="mentality.html">mentality</a></li><li><a href="mentality.keras.html">keras</a></li><li><a href="mentality.keras.graphs.html">graphs</a></li><li><a href="mentality.keras.layers.html">layers</a></li><li><a href="mentality.programs.html">programs</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">utils/utils.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * This module contains functions used to check variable type.
+ * @module utils
+ * @memberof mentality
+ */
+
+const toposort = require('./toposort');
+const typeUtils = require('./type_utils');
+
+const nameCollection = {};
+
+
+module.exports = {
+  /**
+   * Get a name with `prefix`. If `prefix` hasn't used yet, returns `prefix`. If it is used, return name with `prefix` and number of occurrences.
+   *
+   * @example
+   * getName('myname');     // 'myname'
+   * getName('myname');     // 'myname_1'
+   * getName('myname');     // 'myname_2'
+   * getName('myname');     // 'myname_3'
+   * getName('myname');     // 'myname_4'
+   * 
+   * @param  {string} prefix Prefix of the name.
+   * @return {string}        Generated name from name pool.
+   */
+  getName(prefix) {
+    let name;
+    if (prefix in nameCollection) {
+      nameCollection[prefix] += 1;
+      name = `${prefix}_${nameCollection[prefix]}`;
+    } else {
+      nameCollection[prefix] = 0;
+      name = prefix;
+    }
+
+    return name;
+  },
+
+  sortChildren(heads, silent = true) {
+    const stack = heads.slice();
+    const edges = [];
+    const resolved = new Set();
+
+    while (stack.length !== 0) {
+      const currentNode = stack.pop();
+
+      if (!resolved.has(currentNode)) {
+        resolved.add(currentNode);
+        for (let i = 0; i &lt; currentNode.to.length; i += 1) {
+          stack.push(currentNode.to[i]);
+          edges.push([currentNode, currentNode.to[i]]);
+        }
+      }
+    }
+
+    try {
+      return toposort(edges);
+    } catch (e) {
+      if (silent) delete e.predecessors;
+      throw e;
+    }
+  },
+
+  unroll(rootNode, opts = {}) {
+    const queue = [rootNode];
+    const sequence = [];
+
+    while (queue.length > 0) {
+      const node = queue.shift();
+      const sortedNodes = this.sortChildren(node.children, opts.silent);
+      queue.unshift(...sortedNodes);
+      sequence.push(node);
+    }
+    return sequence;
+  },
+
+  /**
+   * Prettify arguments passing.
+   *
+   * @todo Reconsider
+   * 
+   * @example
+   * let funcCall = 'python_fuction(arg1=arg1\narg2=arg2\narg3=arg3)';
+   *
+   * allignArguments(funcCall)
+   * 
+   * // python_fuction(arg1=arg1
+   * //                arg2=arg2
+   * //                arg3=arg3)
+   * @param  {String} funcCall call as string.
+   * @return {String}          Pretty call.
+   */
+  allignArguments(funcCall) {
+    const lines = funcCall.split('\n');
+    let index = 0;
+    while (lines[0][index] !== '(') {
+      index += 1;
+    }
+    index += 1;
+
+    for (let i = 1; i &lt; lines.length; i += 1) {
+      lines[i] = ' '.repeat(index) + lines[i].trim();
+    }
+    return lines;
+  },
+
+
+  /**
+   * Determines output length of a convolution given input length. Based on {@link https://github.com/fchollet/keras/blob/master/keras/utils/conv_utils.py#L90 Keras}
+   * @param  {Object}   args              Arguments used to compute output length.
+   * @param  {number}  args.inputLength
+   * @param  {number}  args.filterSize
+   * @param  {number}  args.padding       One of "same", "valid", "full".
+   * @param  {number}  args.stride       
+   * @param  {number}  args.dilation    
+   * @return {number}                     The output length.
+   */
+  computeConvOutputLength(args) {
+    const {
+      inputLength,
+      filterSize,
+      padding,
+      stride,
+      dilation = 1,
+    } = args;
+
+    if (!inputLength) {
+      throw new Error('Missing inputLength.');
+    }
+
+    const dilatedFilterSize = filterSize + ((filterSize - 1) * (dilation - 1));
+
+    let outputLength;
+    switch (padding.toLowerCase()) {
+      case 'same':
+      case 'causal':
+        outputLength = inputLength;
+        break;
+      case 'valid':
+        outputLength = (inputLength - dilatedFilterSize) + 1;
+        break;
+      case 'full':
+        outputLength = (inputLength + dilatedFilterSize) - 1;
+        break;
+      default:
+        throw new Error(`Unrecognized value for padding. Got ${padding}`);
+    }
+
+    return Math.floor(((outputLength + stride) - 1) / stride);
+  },
+
+  /**
+   * Convert JS variable to Python variable.
+   *
+   * @example
+   * toString(1)                      // '1'
+   * toString(true)                   // 'True'
+   * toString(false)                  // 'False'
+   * toString(null)                   // 'None'
+   * toString(undefined)              // 'None'
+   * toString([1, 2, 3])              // '[1, 2, 3]'
+   * toString([1, true, null, 'hi'])  // '[1, True, None, 'hi']'
+   * toString('string')               // 'string'
+   * 
+   * @param  {Any} mvalue JS value.
+   * @return {Any}        Python value as string.
+   */
+  toString(mvalue) {
+    let value = mvalue;
+
+    if (typeof value === 'boolean') {
+      return value ? 'True' : 'False';
+    }
+
+    if (value === undefined || value == null) {
+      return 'None';
+    }
+
+    if (typeUtils.isArray(value)) {
+      value = value.map(e => toString(e));
+
+      const res = value.join(', ');
+      return `[${res}]`;
+    }
+
+    if (typeUtils.isString(value)) {
+      return `'${value}'`;
+    }
+
+    if (typeUtils.isObject(value)) {
+      return JSON.stringify(value);
+    }
+
+    return value.toString();
+  },
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.4</a> on Tue Aug 15 2017 12:30:14 GMT-0400 (EDT) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
